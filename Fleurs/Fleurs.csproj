@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fleur1.jpeg" />
+    <None Remove="Fleur2.jpg" />
     <None Remove="Lg_ChezRoseFleuriste_CMYK.png" />
     <None Remove="ouvrir-un-magasin-de-fleurs.jpg" />
   </ItemGroup>
@@ -20,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fleur1.jpeg" />
+    <Resource Include="Fleur2.jpg" />
     <Resource Include="Lg_ChezRoseFleuriste_CMYK.png" />
     <Resource Include="ouvrir-un-magasin-de-fleurs.jpg" />
   </ItemGroup>

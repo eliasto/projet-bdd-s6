@@ -15,7 +15,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -25,23 +26,57 @@
             FontSize="50"
             HorizontalAlignment="Center"
             />
-        <Button
-            Grid.Column="0"
+        <Button 
+            Grid.Column="0" 
             Grid.Row="1"
-            Margin="50"
-            Content="Bouquet standard"
-            FontSize="20"
-            x:Name="B_Standard_Button"
+            Height="150" 
+            Width="150"  
+            x:Name="B_Standard_Button" 
             Click="B_Standard_Button_Click"
+            BorderBrush="Wheat"
+            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+            >
+            <Image 
+                Source="/Fleur1.jpeg"  
+                Height="150" 
+                Width="150"
+                Stretch="UniformToFill"
+                >
+            </Image>
+        </Button>
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Text="Bouquet standard"
+            FontSize="20"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
             />
         <Button
             Grid.Column="1"
             Grid.Row="1"
-            Margin="50"
-            Content="Bouquet personnalisée"
-            FontSize="20"
+            Height="150"
+            Width="150"
             x:Name="B_P_Button"
             Click="B_P_Button_Click"
+            BorderBrush="Wheat"            
+            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+            >
+            <Image 
+                Source="/Fleur2.jpg"  
+                Height="160" 
+                Width="160"
+                Stretch="UniformToFill"
+                >
+            </Image>
+            </Button>
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="1"
+            Text="Bouquet personnalisée"
+            FontSize="20"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
             />
     </Grid>
 </Page>

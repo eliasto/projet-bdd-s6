@@ -7,6 +7,106 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="1"
+            Text="Nom du bouquet"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"  
+            TextWrapping="WrapWithOverflow"
+            FontStyle="Italic"
+            FontWeight="Bold"
+            />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="2"
+            Text="Contient"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            FontStyle="Italic"
+            FontWeight="Bold"
+            />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="3"
+            Text="Occasion"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            FontStyle="Italic"
+            FontWeight="Bold"
+            />
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="4"
+            Text="Prix"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            FontStyle="Italic"
+            FontWeight="Bold"
+            />
+        <CheckBox 
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            x:Name="GrosMerci_CheckBox"
+            />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="Gros Merci"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="Gros Merci"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="2"
+            Text="Arrangement floral avec marguerites et verdure"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="3"
+            Text="Toute occasion"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="4"
+            Text="45 €"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            />
     </Grid>
 </UserControl>
