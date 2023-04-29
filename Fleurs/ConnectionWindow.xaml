@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fleurs"
         mc:Ignorable="d"
-        Title="Extranet - Chez Rose - Connexion" Height="450" Width="800"        
+        Title="Extranet - Chez Rose" Height="450" Width="800"        
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -14,6 +14,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}">
+    
     <Grid x:Name="login_window">
         <Grid.Background>
             <ImageBrush ImageSource="/ouvrir-un-magasin-de-fleurs.jpg" Stretch="UniformToFill"/>
@@ -45,7 +46,7 @@
                         materialDesign:HintAssist.Hint="Votre e-mail" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
                     <PasswordBox
                         Grid.Row="2"
-                        materialDesign:HintAssist.HelperText="Veuillez entrer votre mot de passe"
+                        materialDesign:HintAssist.HelperText="Vous ne pouvez pas récupérer votre mot de passe."
                         materialDesign:HintAssist.Hint="Mot de passe"
                         materialDesign:PasswordBoxAssist.Password="{Binding Password1, Mode=TwoWay}"
                         materialDesign:TextFieldAssist.HasClearButton="True"

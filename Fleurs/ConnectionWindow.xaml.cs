@@ -35,6 +35,7 @@ namespace Fleurs
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();
+            this.Content = new Home();
         }
 
         private void Connection_Button_Click(object sender, RoutedEventArgs e)
