@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
 
@@ -75,18 +74,24 @@ namespace Fleurs
                 reader.Close();
                 if (compteur == 0)
                 {
-                    var result = MessageBox.Show("Le compte associé à "+email+" n'existe pas sur notre extranet.\nSouhaitez-vous créer un compte avec cette adresse e-mail ?", "Compte inconnu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var result = MessageBox.Show("Le compte associé à " + email + " n'existe pas sur notre extranet.\nSouhaitez-vous créer un compte avec cette adresse e-mail ?", "Compte inconnu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Creation_Compte creation_Compte = new Creation_Compte();
-                        this.Content = creation_Compte;
+                        this.Content = new Register();
                     }
                 }
-            
-            } catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 Trace.WriteLine(ex);
             }
-         }
+        }
+
+        private void Redirect_Register_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new Register();
+        }
     }
 }
+       

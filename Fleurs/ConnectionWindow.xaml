@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Fleurs"
         mc:Ignorable="d"
-        Title="Extranet - Chez Rose" Height="450" Width="800"        
+        Title="Extranet - Chez Rose - Connexion" Height="450" Width="800"        
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -14,7 +14,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}">
-    <Grid>
+    <Grid x:Name="login_window">
         <Grid.Background>
             <ImageBrush ImageSource="/ouvrir-un-magasin-de-fleurs.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
@@ -38,7 +38,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">Bienvenue sur l'intranet</TextBlock>
+                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">Bienvenue sur l'extranet</TextBlock>
                     <TextBox
                         Grid.Row="1"
                         x:Name="Email_TextBox"
@@ -55,11 +55,17 @@
                         HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
                 </Grid>
             </Grid>
+            <Grid VerticalAlignment="Bottom">
             <Button
                 x:Name="Connection_Button"
                 Click="Connection_Button_Click"
     materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
     Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="Se connecter" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Background="#FF21A125" BorderBrush="#FF2AC145"/>
+            <Button
+                x:Name="Register_Text"
+                Click="Redirect_Register_Click"
+                Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous n'avez pas de compte ? S'inscrire.</Button>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
