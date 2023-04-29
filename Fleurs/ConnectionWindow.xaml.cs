@@ -60,7 +60,9 @@ namespace Fleurs
 
                         if (password_mysql == password)
                         {
-                            MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
+                            PersonnaliseeOuStandard choix_du_type_de_bouquet = new PersonnaliseeOuStandard();
+                            this.Content = choix_du_type_de_bouquet;
+                            //MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
