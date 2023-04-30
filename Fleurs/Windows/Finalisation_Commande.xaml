@@ -84,6 +84,8 @@
             FontSize="25"
             Width="200"
             x:Name="CodePostale_TextBox"
+            MaxLength="5"
+            PreviewTextInput="NumberValidationTextBox"
             />
         <TextBlock 
             Grid.Row="4"
@@ -119,6 +121,8 @@
         <Button
             Grid.Row="6"
             Grid.Column="1"            
-            Content="Payer avec la carte lié au compte"/>
+            Content="Payer avec la carte lié au compte"
+            x:Name="Payement_Button"
+            Click="Payement_Button_Click"/>
     </Grid>
 </UserControl>
