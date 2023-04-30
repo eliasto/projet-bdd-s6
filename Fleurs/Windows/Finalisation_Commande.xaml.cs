@@ -81,6 +81,17 @@ namespace Fleurs.Windows
                 $"VALUES(2,'{dateDeLivraisonPage}',{prixPage},'{Message}','{etatPage}','{typePage}');";//voir pour les address
             reader = command.ExecuteReader();
             reader.Close();
+
+            if(MessageBox.Show("Votre commande à bien été effectué. Voulez vous continuez vos achats ?", "Commande complete", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+            {
+                Choix_Perso_standard choix_du_type_de_bouquet = new Choix_Perso_standard(emailPage);
+                this.Content = choix_du_type_de_bouquet;
+            }
+            else
+            {
+                Fleurs.MainWindow mainWindow = new Fleurs.MainWindow();
+                this.Content= mainWindow.Content;
+            }
             //juste ça 
             // et relire et commenter
         }
