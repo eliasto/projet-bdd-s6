@@ -20,8 +20,12 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Choix_Bouquet_Personnalisee : UserControl
     {
-        public Choix_Bouquet_Personnalisee()
+        private string emailPage;
+        private string typePage;
+        public Choix_Bouquet_Personnalisee(string email, string type)
         {
+            emailPage = email;
+            typePage = type;
             InitializeComponent();
         }
     }
