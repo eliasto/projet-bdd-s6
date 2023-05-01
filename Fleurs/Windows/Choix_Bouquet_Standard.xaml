@@ -250,8 +250,10 @@
             VerticalAlignment="Center"
             />
         <Button
-            Grid.Column="2"
+            Grid.Column="1"
             Grid.Row="6"
+            Grid.ColumnSpan="2"
+            Width="250"
             Content="Finaliser la commande"  
             x:Name="FinaliseCommande_Button"
             Click="FinaliseCommande_Button_Click"
@@ -261,8 +263,9 @@
             Style="{StaticResource MaterialDesignIconButton}"
             ToolTip="MaterialDesignIconButton"
             x:Name="Retour_Button"
-            Grid.Column="1"
+            Grid.Column="0"
             Grid.Row="6"
+            Grid.ColumnSpan="2"
             Click="Retour_Button_Click">
             <materialDesign:PackIcon
             Kind="KeyboardBackspace" />

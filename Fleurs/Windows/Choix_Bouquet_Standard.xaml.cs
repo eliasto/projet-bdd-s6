@@ -62,7 +62,7 @@ namespace Fleurs.Windows
                 dureeEnJ_int = Convert.ToInt32(dureeEnJ_str) + 1;
                 futur = !(selectedDate < date_du_jour);
                 bouquet_choisi = Choix_ComboBox.Text;
-                int prix;
+                float prix;
                 switch(bouquet_choisi)
                 {
                     case "Gros Merci":

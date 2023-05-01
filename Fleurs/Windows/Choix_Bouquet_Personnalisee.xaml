@@ -4,9 +4,115 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Fleurs.Windows"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="50"
+            Text="Personnalisez votre bouquet"     
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Text="Entrez la description de votre arrangement floral"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="20"
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="15"
+            Width="300"
+            Height="70"
+            x:Name="Wish_TextBox"
+            AcceptsReturn="True"
+            />
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Text="Budget"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="20"
+            TextWrapping="WrapWithOverflow"
+            />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            TextWrapping="WrapWithOverflow"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="20"
+            Width="200"
+            x:Name="Budget_TextBox"
+            MaxLength="4"
+            PreviewTextInput="NumberValidationTextBox"
+            materialDesign:TextFieldAssist.SuffixText="€"
+            />
+
+
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button
+            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+            Style="{StaticResource MaterialDesignIconButton}"
+            ToolTip="MaterialDesignIconButton"
+            x:Name="Retour_Button"
+            HorizontalAlignment="Center"
+            Grid.Column="0"
+            Click="Retour_Button_Click"
+            >
+                <materialDesign:PackIcon
+                Kind="KeyboardBackspace" />
+            </Button>
+            <DatePicker
+            x:Name="DateDeLivraison_DP"
+            Width="100"
+            materialDesign:CalendarAssist.IsHeaderVisible="False"
+            materialDesign:HintAssist.Hint="Date de livraison"
+            Grid.Column="1">
+                <DatePicker.SelectedDate>
+                <Binding
+                Path="FutureValidatingDate"
+                    UpdateSourceTrigger="PropertyChanged">
+                </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+        </Grid>
+        
             
+            
+        <Button
+            Grid.Column="2"
+            Grid.Row="6"
+            Content="Finaliser la commande"  
+            x:Name="FinaliseCommande_Button"
+            Click="FinaliseCommande_Button_Click"
+            />
     </Grid>
 </UserControl>
