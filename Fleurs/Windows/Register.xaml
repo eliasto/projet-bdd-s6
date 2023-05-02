@@ -71,10 +71,12 @@
                         HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
                     <TextBox
                         Grid.Row="3"
+                        PreviewTextInput="NumberValidationTextBox"
+                        MaxLength="10"
                         x:Name="Phone_TextBox"
                         materialDesign:HintAssist.Hint="Votre numéro de téléphone"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" UndoLimit="10"/>
                     <PasswordBox
                         Grid.Row="4"
                         materialDesign:HintAssist.Hint="Mot de passe"

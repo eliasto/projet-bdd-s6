@@ -247,18 +247,272 @@
                             <TextBlock
             HorizontalAlignment="Center"
             Text="Statistics" />
+                            
                         </StackPanel>
                     </TabItem.Header>
-                    <TextBlock>
-        <Run
-          Text="tab 4 content. Default look and behaviors." />
-        <LineBreak />
-        <LineBreak />
-        <Run
-          FontStyle="Italic">
-        Prfadsssssssssssssssbvdcas
-      </Run>
-                    </TextBlock>
+                    
+                    <Grid
+                       Margin="20,20,20,20"
+                        >
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Text="The statistics of your shop:"
+                        />
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:Card
+                            x:Name="best_shop_card"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Grid.Column="0"
+  Width="200"
+                            >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+        Height="140" />
+                                        <RowDefinition
+        Height="*" />
+                                        <RowDefinition
+        Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+      Width="196"
+      Height="140"
+                                    x:Name="best_shop_image"
+      Source="https://lh3.googleusercontent.com/places/AJQcZqLZ34eLqQK8-XMKIZVV-kYekm7r75Ei_03qacK-_u7PK6ywE8kBchsWd8UXdqn5c-TGMRFc2N---y5SPNfWpP844ZHYjaR61JA=s1600-w400"
+      Stretch="UniformToFill" />
+                                    <Button
+      Grid.Row="0"
+      Margin="0,0,16,-20"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                                        <materialDesign:PackIcon
+        Kind="Flower" />
+                                    </Button>
+                                    <StackPanel
+      Grid.Row="1"
+      Margin="8,24,8,0">
+                                        <TextBlock
+        FontWeight="Bold">
+      The best shop of all time
+                                        </TextBlock>
+                                        <TextBlock
+        VerticalAlignment="Center"
+                                        Margin="0,0,0,20"
+                                        x:Name="best_shop_text"
+        Text="The shop with the best turnover is the one in Paris. It sells for a total of 20.34€ of accessories, 12.34€ of bouquets and 12.34€ of flowers, for a total of 123.45€ !"
+        TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                            x:Name="average_price_bouquet_card"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Grid.Column="1"
+  Width="200"
+                            >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+        Height="140" />
+                                        <RowDefinition
+        Height="*" />
+                                        <RowDefinition
+        Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+      Width="196"
+      Height="140"
+                                    x:Name="average_price_bouquet_image"
+      Source="https://lh3.googleusercontent.com/places/AJQcZqLZ34eLqQK8-XMKIZVV-kYekm7r75Ei_03qacK-_u7PK6ywE8kBchsWd8UXdqn5c-TGMRFc2N---y5SPNfWpP844ZHYjaR61JA=s1600-w400"
+      Stretch="UniformToFill" />
+                                    <Button
+      Grid.Row="0"
+      Margin="0,0,16,-20"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                                        <materialDesign:PackIcon
+        Kind="Flower" />
+                                    </Button>
+                                    <StackPanel
+      Grid.Row="1"
+      Margin="8,24,8,0">
+                                        <TextBlock
+        FontWeight="Bold">
+      The best shop of all time
+                                        </TextBlock>
+                                        <TextBlock
+        VerticalAlignment="Center"
+                                        Margin="0,0,0,20"
+                                        x:Name="average_price_bouquet_text"
+        Text="The shop with the best turnover is the one in Paris. It sells for a total of 20.34€ of accessories, 12.34€ of bouquets and 12.34€ of flowers, for a total of 123.45€ !"
+        TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                            x:Name="best_client_card"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Grid.Column="2"
+  Width="200"
+                            >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+        Height="140" />
+                                        <RowDefinition
+        Height="*" />
+                                        <RowDefinition
+        Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+      Width="196"
+      Height="140"
+                                    x:Name="best_client_image"
+      Source="https://lh3.googleusercontent.com/places/AJQcZqLZ34eLqQK8-XMKIZVV-kYekm7r75Ei_03qacK-_u7PK6ywE8kBchsWd8UXdqn5c-TGMRFc2N---y5SPNfWpP844ZHYjaR61JA=s1600-w400"
+      Stretch="UniformToFill" />
+                                    <Button
+      Grid.Row="0"
+      Margin="0,0,16,-20"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                                        <materialDesign:PackIcon
+        Kind="Flower" />
+                                    </Button>
+                                    <StackPanel
+      Grid.Row="1"
+      Margin="8,24,8,0">
+                                        <TextBlock
+        FontWeight="Bold">
+      The best shop of all time
+                                        </TextBlock>
+                                        <TextBlock
+        VerticalAlignment="Center"
+                                        Margin="0,0,0,20"
+                                        x:Name="best_client_text"
+        Text="The shop with the best turnover is the one in Paris. It sells for a total of 20.34€ of accessories, 12.34€ of bouquets and 12.34€ of flowers, for a total of 123.45€ !"
+        TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                            x:Name="best_bouquet_card"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Grid.Column="3"
+  Width="200"
+                            >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+        Height="140" />
+                                        <RowDefinition
+        Height="*" />
+                                        <RowDefinition
+        Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+      Width="196"
+      Height="140"
+                                    x:Name="best_bouquet_image"
+      Source="https://lh3.googleusercontent.com/places/AJQcZqLZ34eLqQK8-XMKIZVV-kYekm7r75Ei_03qacK-_u7PK6ywE8kBchsWd8UXdqn5c-TGMRFc2N---y5SPNfWpP844ZHYjaR61JA=s1600-w400"
+      Stretch="UniformToFill" />
+                                    <Button
+      Grid.Row="0"
+      Margin="0,0,16,-20"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                                        <materialDesign:PackIcon
+        Kind="Flower" />
+                                    </Button>
+                                    <StackPanel
+      Grid.Row="1"
+      Margin="8,24,8,0">
+                                        <TextBlock
+        FontWeight="Bold">
+      The best shop of all time
+                                        </TextBlock>
+                                        <TextBlock
+        VerticalAlignment="Center"
+                                        Margin="0,0,0,20"
+                                        x:Name="best_bouquet_text"
+        Text="The shop with the best turnover is the one in Paris. It sells for a total of 20.34€ of accessories, 12.34€ of bouquets and 12.34€ of flowers, for a total of 123.45€ !"
+        TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card
+                            x:Name="worst_flower_card"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Grid.Column="4"
+  Width="200"
+                            >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+        Height="140" />
+                                        <RowDefinition
+        Height="*" />
+                                        <RowDefinition
+        Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+      Width="196"
+      Height="140"
+                                    x:Name="worst_flower_image"
+      Source="https://lh3.googleusercontent.com/places/AJQcZqLZ34eLqQK8-XMKIZVV-kYekm7r75Ei_03qacK-_u7PK6ywE8kBchsWd8UXdqn5c-TGMRFc2N---y5SPNfWpP844ZHYjaR61JA=s1600-w400"
+      Stretch="UniformToFill" />
+                                    <Button
+      Grid.Row="0"
+      Margin="0,0,16,-20"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                                        <materialDesign:PackIcon
+        Kind="Flower" />
+                                    </Button>
+                                    <StackPanel
+      Grid.Row="1"
+      Margin="8,24,8,0">
+                                        <TextBlock
+        FontWeight="Bold">
+      The best shop of all time
+                                        </TextBlock>
+                                        <TextBlock
+        VerticalAlignment="Center"
+                                        Margin="0,0,0,20"
+                                        x:Name="worst_flower_text"
+        Text="The shop with the best turnover is the one in Paris. It sells for a total of 20.34€ of accessories, 12.34€ of bouquets and 12.34€ of flowers, for a total of 123.45€ !"
+        TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+
+                        </Grid>
+                         </Grid>
+
                 </TabItem>
 
             </TabControl>

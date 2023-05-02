@@ -18,6 +18,8 @@ using System.IO;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
 
+using System.Text.RegularExpressions;
+
 
 namespace Fleurs.Windows
 {
@@ -204,6 +206,13 @@ namespace Fleurs.Windows
                 this.address.Visibility = Visibility.Visible;
             }
         }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
     }
 }
 

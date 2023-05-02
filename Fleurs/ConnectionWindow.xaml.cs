@@ -35,7 +35,7 @@ namespace Fleurs
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();
-            this.Content = new Home();
+            //this.Content = new Home();
         }
 
         private void Connection_Button_Click(object sender, RoutedEventArgs e)
@@ -61,6 +61,7 @@ namespace Fleurs
                         if (password_mysql == password)
                         {
                             MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
+                            this.Content = new Home();
                         }
                         else
                         {
