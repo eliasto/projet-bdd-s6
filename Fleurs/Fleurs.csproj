@@ -12,12 +12,14 @@
     <None Remove="Fleur2.jpg" />
     <None Remove="Lg_ChezRoseFleuriste_CMYK.png" />
     <None Remove="ouvrir-un-magasin-de-fleurs.jpg" />
+    <None Remove="ouvrir-un-magasin-de-fleurs_1.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignColors" Version="2.1.2" />
     <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ShowMeTheXAML" Version="2.0.0" />
   </ItemGroup>
 
@@ -26,6 +28,7 @@
     <Resource Include="Fleur2.jpg" />
     <Resource Include="Lg_ChezRoseFleuriste_CMYK.png" />
     <Resource Include="ouvrir-un-magasin-de-fleurs.jpg" />
+    <Resource Include="ouvrir-un-magasin-de-fleurs_1.jpg" />
   </ItemGroup>
 
 </Project>
