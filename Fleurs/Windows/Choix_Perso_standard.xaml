@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="Fleurs.Windows.Choix_Perso_standard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Fleurs.Windows"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Text="Que voulez vous ?"
+            FontSize="50"
+            HorizontalAlignment="Center"
+            />
+        <Button 
+            Grid.Column="0" 
+            Grid.Row="1"
+            Height="150" 
+            Width="150"  
+            x:Name="B_Standard_Button" 
+            Click="B_Standard_Button_Click"
+            BorderBrush="Wheat"
+            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+            >
+            <Image 
+                Source="/Fleur1.jpeg"  
+                Height="150" 
+                Width="150"
+                Stretch="UniformToFill"
+                >
+            </Image>
+        </Button>
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Text="Bouquet standard"
+            FontSize="20"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            />
+        <Button
+            Grid.Column="1"
+            Grid.Row="1"
+            Height="150"
+            Width="150"
+            x:Name="B_P_Button"
+            Click="B_P_Button_Click"
+            BorderBrush="Wheat"            
+            Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+            >
+            <Image 
+                Source="/Fleur2.jpg"  
+                Height="160" 
+                Width="160"
+                Stretch="UniformToFill"
+                >
+            </Image>
+        </Button>
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="1"
+            Text="Bouquet personnalisée"
+            FontSize="20"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            />
+    </Grid>
+</UserControl>
