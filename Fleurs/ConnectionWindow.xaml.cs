@@ -1,4 +1,4 @@
-﻿using Fleurs.Windows;
+using Fleurs.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,10 +60,15 @@ namespace Fleurs
 
                         if (password_mysql == password)
                         {
-                        //TODO: Check if the user is an employee or not
-                            Choix_Perso_standard choix_du_type_de_bouquet = new Choix_Perso_standard(email);
-                            this.Content = choix_du_type_de_bouquet;
-                            //MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
+                        if(employee)
+                            {
+                                this.Content = new Home();
+                            }
+                            else
+                            {
+                                this.Content = new Choix_Perso_standard(email);
+                            }
+                            MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {

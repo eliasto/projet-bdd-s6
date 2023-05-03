@@ -303,7 +303,7 @@
       VerticalAlignment="Bottom"
       Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
                                         <materialDesign:PackIcon
-        Kind="Flower" />
+        Kind="Podium" />
                                     </Button>
                                     <StackPanel
       Grid.Row="1"
@@ -350,12 +350,13 @@
       VerticalAlignment="Bottom"
       Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
                                         <materialDesign:PackIcon
-        Kind="Flower" />
+        Kind="Euro" />
                                     </Button>
                                     <StackPanel
       Grid.Row="1"
       Margin="8,24,8,0">
                                         <TextBlock
+                                            x:Name="average_price_bouquet_title"
         FontWeight="Bold">
       The best shop of all time
                                         </TextBlock>
@@ -397,12 +398,13 @@
       VerticalAlignment="Bottom"
       Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
                                         <materialDesign:PackIcon
-        Kind="Flower" />
+        Kind="Money" />
                                     </Button>
                                     <StackPanel
       Grid.Row="1"
       Margin="8,24,8,0">
                                         <TextBlock
+                                            x:Name="best_client_title"
         FontWeight="Bold">
       The best shop of all time
                                         </TextBlock>
@@ -450,6 +452,7 @@
       Grid.Row="1"
       Margin="8,24,8,0">
                                         <TextBlock
+                                            x:Name="best_bouquet_title"
         FontWeight="Bold">
       The best shop of all time
                                         </TextBlock>
@@ -491,12 +494,13 @@
       VerticalAlignment="Bottom"
       Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
                                         <materialDesign:PackIcon
-        Kind="Flower" />
+        Kind="ThumbDown" />
                                     </Button>
                                     <StackPanel
       Grid.Row="1"
       Margin="8,24,8,0">
                                         <TextBlock
+                                            x:Name="worst_flower_title"
         FontWeight="Bold">
       The best shop of all time
                                         </TextBlock>

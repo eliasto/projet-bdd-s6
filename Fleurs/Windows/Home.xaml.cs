@@ -26,6 +26,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
+using System.Text.Json;
+using Microsoft.Win32;
+
 namespace Fleurs.Windows
 {
     /// <summary>
@@ -35,12 +38,15 @@ namespace Fleurs.Windows
     {
         string connectionString;
         MySqlConnection connection;
+        MySqlConnection connection1;
+
 
 
         public Home()
         {
             connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
+            connection1 = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();
 
@@ -58,17 +64,90 @@ namespace Fleurs.Windows
             }
 
             dgClients.ItemsSource = clients;
-
             connection.Close();
             connection.Open();
-
 
             MySqlCommand command1 = connection.CreateCommand();
             command1.CommandText = $"SELECT s.id, s.city, COALESCE(SUM(p.price * op.quantity), 0) AS ProductsRevenue, COALESCE(SUM(b.price * ob.quantity), 0) AS BouquetsRevenue, COALESCE(SUM(f.price * ofl.quantity), 0) AS FlowersRevenue, COALESCE(SUM(p.price * op.quantity), 0) + COALESCE(SUM(b.price * ob.quantity), 0) + COALESCE(SUM(f.price * ofl.quantity), 0) AS TotalRevenue FROM orders o LEFT JOIN order_products op ON o.id = op.order_id LEFT JOIN products p ON op.product_id = p.id LEFT JOIN order_bouquets ob ON o.id = ob.order_id LEFT JOIN bouquets b ON ob.bouquet_id = b.id LEFT JOIN order_flowers ofl ON o.id = ofl.order_id LEFT JOIN flowers f ON ofl.flower_id = f.id JOIN shops s ON s.id = o.shop GROUP BY s.id, s.city ORDER BY TotalRevenue DESC;";
 
             MySqlDataReader reader1 = command1.ExecuteReader();
             generateBestShop(reader1);
+
+            reader.Close();
+            connection1.Open();
+            command = connection1.CreateCommand();
+            //Bouquet qui a le plus de succès
+            command.CommandText = $"SELECT bouquets.name, SUM(order_bouquets.quantity) AS total_sales FROM bouquets JOIN order_bouquets ON bouquets.id = order_bouquets.bouquet_id JOIN orders ON order_bouquets.order_id = orders.id WHERE orders.type = 'CS' GROUP BY bouquets.id ORDER BY total_sales DESC LIMIT 1;";
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                string bouquet_name = (string)reader["name"];
+                decimal total_sales = (decimal)reader["total_sales"];
+                this.best_bouquet_title.Text = bouquet_name;
+                this.best_bouquet_text.Text = "Le bouquet qui a le plus de succès est " + bouquet_name + ", avec un total de " + total_sales + " ventes.";
+                this.best_bouquet_image.Source = new BitmapImage(new Uri("https://images.squarespace-cdn.com/content/v1/5a2d9772914e6b4aaeea0989/1604229470337-D6D73ZNU3HB7Z1U2F3PT/BOYA-fleurs-france-horticulteur-paris.jpg?format=1000w"));
             }
+
+            reader.Close();
+            command = connection1.CreateCommand();
+            //Calcul du prix moyen d'un bouquet
+            command.CommandText = $"SELECT AVG(bouquets.price) FROM orders JOIN order_bouquets ON orders.id = order_bouquets.order_id JOIN bouquets ON order_bouquets.bouquet_id = bouquets.id;";
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                decimal average = (decimal)reader["AVG(bouquets.price)"];
+                this.average_price_bouquet_title.Text = "Prix moyen d'un bouquet";
+                this.average_price_bouquet_text.Text = "Le prix moyen d'un bouquet d'un panier type d'un client est de "+ average+" €.";
+                this.average_price_bouquet_image.Source = new BitmapImage(new Uri("https://i.pinimg.com/736x/e7/99/b9/e799b9b79a896eeec05b1fff13d86f91.jpg"));
+            }
+
+            reader.Close();
+            command = connection1.CreateCommand();
+            //Fleur exotique la moins vendue
+            command.CommandText = $"SELECT flowers.name, SUM(order_flowers.quantity) as total_sale FROM orders JOIN order_flowers ON order_flowers.order_id = orders.id JOIN flowers on order_flowers.flower_id = flowers.id GROUP BY flowers.name ORDER BY total_sale ASC LiMIT 1;";
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                decimal total_sale = (decimal)reader["total_sale"];
+                this.worst_flower_title.Text = name;
+                this.worst_flower_text.Text = "La fleur avec le moins de vente est la "+name+" avec "+total_sale+" ventes.";
+                this.worst_flower_image.Source = new BitmapImage(new Uri("https://jardinage.lemonde.fr/images/dossiers/2018-01/fleurs-fanees-171021.jpg"));
+            }
+
+            string text = "";
+
+            reader.Close();
+            command = connection1.CreateCommand();
+            //Meilleur client dans l'année
+            command.CommandText = $"SELECT clients.id, clients.name, SUM(bouquets.price * order_bouquets.quantity) AS total_bouquets FROM orders JOIN clients ON orders.client_id = clients.id JOIN order_bouquets ON orders.id = order_bouquets.order_id JOIN bouquets ON order_bouquets.bouquet_id = bouquets.id WHERE YEAR(orders.creation_date) = YEAR(CURRENT_DATE()) GROUP BY clients.id, clients.name ORDER BY total_bouquets DESC LIMIT 1;";
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                decimal total_bouquets = (decimal)reader["total_bouquets"];
+                text += "Le meilleur client dans l'année est "+name+" où il a acheté pour "+total_bouquets+"€ de bouquets.";
+            }
+
+            reader.Close();
+            command = connection1.CreateCommand();
+            //Meilleur client dans le mois
+            command.CommandText = $"SELECT clients.id, clients.name, SUM(bouquets.price * order_bouquets.quantity) AS total_bouquets FROM orders JOIN clients ON orders.client_id = clients.id JOIN order_bouquets ON orders.id = order_bouquets.order_id JOIN bouquets ON order_bouquets.bouquet_id = bouquets.id WHERE MONTH(orders.creation_date) = MONTH(CURRENT_DATE()) GROUP BY clients.id, clients.name ORDER BY total_bouquets DESC LIMIT 1;";
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                decimal total_bouquets = (decimal)reader["total_bouquets"];
+                text += "Le meilleur client dans le mois est " + name + " où il a acheté pour " + total_bouquets + "€ de bouquets.";
+            }
+
+            this.best_client_title.Text = "Les meilleurs clients";
+            this.best_client_text.Text = text;
+            this.best_client_image.Source = new BitmapImage(new Uri("https://blog.smile.io/content/images/2018/Do%20You%20Know%20Who%20Your%20Best%20Customers%20Are/Best-Customers-Feature.png"));
+            reader.Close();
+
+
+        }
 
         public async void generateBestShop(MySqlDataReader reader1)
         {
@@ -84,7 +163,6 @@ namespace Fleurs.Windows
                 Trace.WriteLine(shops[0].image);
                 this.best_shop_image.Source = new BitmapImage(new Uri(shops[0].image));
                 this.best_shop_text.Text = shops[0].city+"\nTotal accessories sold: "+shops[0].productsRevenue+"€\nTotal flowers sold: "+shops[0].flowersRevenue+"€\nTotal bouquets sold: "+shops[0].bouquetsRevenue+"€\nTurnover: "+shops[0].turnover+"€";
-                Trace.WriteLine("TESSSSSSSSSSSST");
             }
         }
 
@@ -95,9 +173,53 @@ namespace Fleurs.Windows
             Trace.WriteLine(id);
         }
 
-        async private void Export_JSON(object sender, RoutedEventArgs e)
+        private void Export_JSON(object sender, RoutedEventArgs e)
         {
-            
+            MySqlCommand command = this.connection1.CreateCommand();
+            command.CommandText = $"SELECT c.id, c.name, c.surname, c.phone, c.email, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients AS c LEFT JOIN orders AS o ON c.id = o.client_id WHERE o.creation_date IS NULL OR o.creation_date < DATE_SUB(NOW(), INTERVAL 6 MONTH) GROUP BY c.id, c.name,c.surname,c.phone,c.email;";
+            MySqlDataReader reader = command.ExecuteReader();
+            List<Client> clients = new List<Client>();
+            while (reader.Read())
+            {
+                int id = (int)reader["id"];
+                string name = (string)reader["name"];
+                string surname = (string)reader["surname"];
+                string phone = (string)reader["phone"];
+                string email = (string)reader["email"];
+                string fidelity_level = (string)reader["fidelity_level"];
+                Client client = new Client(id, name, surname, phone, email, fidelity_level);
+                clients.Add(client);
+            }
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            var json = JsonSerializer.Serialize(clients, options);
+
+            Trace.WriteLine(json);
+            reader.Close();
+
+            // Créez une instance de SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            // Configurez les propriétés de SaveFileDialog
+            saveFileDialog.Filter = "Fichier JSON (*.json)|*.json";
+            saveFileDialog.Title = "Sélectionnez un emplacement de sauvegarde";
+            saveFileDialog.FileName = "clients.json";
+
+            // Affichez la boîte de dialogue de sauvegarde et vérifiez si l'utilisateur a cliqué sur le bouton "Enregistrer"
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // Ouvrez le fichier de sauvegarde en utilisant un StreamWriter
+                using (StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName))
+                {
+                    // Écrivez la variable json dans le fichier
+                    streamWriter.Write(json);
+                    MessageBox.Show("Le fichier des clients n'ayant pas commandés depuis 6 mois a été enregistré.", "Fichier exporté", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+
+
 
         }
 
@@ -151,7 +273,7 @@ namespace Fleurs.Windows
         public string fidelity_level { get; set; } //0: no fidelity, 1: bronze, 2: gold
 
 
-        public Client(int id, string name, string surname, string phone, string email, string fidelity_level)
+        public Client(int id, string name, string surname, string phone, string email, string fidelity_level = "Aucun")
         {
             this.id = id;
             this.name = name;
