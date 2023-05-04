@@ -28,6 +28,7 @@ using Newtonsoft.Json.Linq;
 
 using System.Text.Json;
 using Microsoft.Win32;
+using System.Xml.Serialization;
 
 namespace Fleurs.Windows
 {
@@ -257,6 +258,45 @@ namespace Fleurs.Windows
 
         private void Export_XML(object sender, RoutedEventArgs e)
         {
+            MySqlCommand command = this.connection1.CreateCommand();
+            command.CommandText = $"SELECT c.id, c.name, c.surname, c.phone, c.email, COUNT(o.id) AS num_orders, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients AS c JOIN orders AS o ON c.id = o.client_id WHERE o.creation_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY c.id, c.name, c.surname, c.phone, c.email HAVING COUNT(o.id) > 1;";
+            MySqlDataReader reader = command.ExecuteReader();
+            List<Client_XML> clients = new List<Client_XML>();
+            while (reader.Read())
+            {
+                int id = (int)reader["id"];
+                string name = (string)reader["name"];
+                string surname = (string)reader["surname"];
+                string phone = (string)reader["phone"];
+                string email = (string)reader["email"];
+                string fidelity_level = (string)reader["fidelity_level"];
+                Client_XML client = new Client_XML { email = email, id = id, name = name, surname = surname, phone = phone, fidelity_level = fidelity_level};
+                clients.Add(client);
+            }
+            
+            reader.Close();
+            XmlSerializer xs = new XmlSerializer(typeof(List<Client_XML>));
+            // Créez une instance de SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            // Configurez les propriétés de SaveFileDialog
+            saveFileDialog.Filter = "Fichier XML (*.xml)|*.xml";
+            saveFileDialog.Title = "Sélectionnez un emplacement de sauvegarde";
+            saveFileDialog.FileName = "clients.xml";
+
+            // Affichez la boîte de dialogue de sauvegarde et vérifiez si l'utilisateur a cliqué sur le bouton "Enregistrer"
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // Ouvrez le fichier de sauvegarde en utilisant un StreamWriter
+                using (StreamWriter streamWriter = new StreamWriter(saveFileDialog.FileName))
+                {
+                    // Écrivez la variable json dans le fichier
+                    xs.Serialize(streamWriter, clients);
+                    MessageBox.Show("Le fichier des clients ayant commandé plusieurs fois durant le dernier mois a été enregistré.", "Fichier exporté", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+
+
 
         }
     }
@@ -265,6 +305,7 @@ namespace Fleurs.Windows
 
     public class Client
     {
+        [XmlAttribute]
         public int id { get; set; }
         public string name { get; set; }
         public string surname { get; set; }
@@ -286,6 +327,18 @@ namespace Fleurs.Windows
 
     }
 
+    public class Client_XML
+    {
+        [XmlAttribute]
+        public int id { get; set; }
+        public string name { get; set; }
+        public string surname { get; set; }
+        public string phone { get; set; }
+        public string email { get; set; }
+        public string fidelity_level { get; set; } //0: no fidelity, 1: bronze, 2: gold
+
+    }
+    
     public class Shop
     {
         public int id { get; set; }
@@ -305,6 +358,36 @@ namespace Fleurs.Windows
             this.productsRevenue = productsRevenue;
             this.bouquetsRevenue = bouquetsRevenue;
             this.image = image;
+        }
+    }
+
+    public class Orders
+    {
+        public int id { get; set; }
+        public int client_id { get; set; }
+        public string type { get; set; }
+        public string wishes { get; set; }
+        public decimal max_price { get; set; }
+        public string address { get; set; } 
+        public string message { get; set; } 
+        public DateTime delivery { get; set; }
+        public DateTime creation_time { get; set; }
+        public string status { get; set; }
+        public int shop { get; set; }
+
+        public Orders(int id, int client_id, string type, string wishes, decimal max_price, string address, string message, DateTime delivery, DateTime creation_time, string status, int shop)
+        {
+            this.id = id;
+            this.client_id = client_id;
+            this.type = type;
+            this.wishes = wishes;
+            this.max_price = max_price;
+            this.address = address;
+            this.message = message;
+            this.delivery = delivery;
+            this.creation_time = creation_time;
+            this.status = status;
+            this.shop = shop;
         }
     }
 

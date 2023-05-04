@@ -57,6 +57,8 @@ namespace Fleurs
                     {
                         string password_mysql = (string)reader["password"];
                         string name_mysql = (string)reader["name"];
+                        bool employee = (bool)reader["employee"];
+
 
                         if (password_mysql == password)
                         {
