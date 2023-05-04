@@ -62,6 +62,7 @@ namespace Fleurs
                         {
                             Choix_Perso_standard choix_du_type_de_bouquet = new Choix_Perso_standard(email);
                             this.Content = choix_du_type_de_bouquet;
+                            //this.Content = new Home();
                             //MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else

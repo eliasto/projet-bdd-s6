@@ -23,7 +23,7 @@ namespace Fleurs.Windows
     /// <summary>
     /// Logique d'interaction pour Choix_Bouquet_Standard.xaml
     /// </summary>
-    public partial class Choix_Bouquet_Personnalise : UserControl
+    public partial class Choix_Bouquet_Standard : UserControl
     {
         string emailPage;
         string typePage;
@@ -32,16 +32,38 @@ namespace Fleurs.Windows
 
         string connectionString;
         MySqlConnection connection;
+        private List<Bouquet> Bouquets { get; set; }
 
-        public Choix_Bouquet_Personnalise(string email, string type)
+        public Choix_Bouquet_Standard(string email, string type)
         {
             emailPage = email;
             typePage= type;
-            InitializeComponent();
             connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
-            //connectionString = "SERVER=localhost;PORT=3306;DATABASE=Fleurs;UID=root;PASSWORD=root;";
             connection = new MySqlConnection(connectionString);
+            InitializeComponent();
             connection.Open();
+
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM bouquets;";
+            MySqlDataReader reader = command.ExecuteReader();
+
+            Bouquets = new List<Bouquet>();
+
+            while (reader.Read())
+            {
+                Bouquet bouquet = new Bouquet((int)reader["id"], (string)reader["name"], (string)reader["description"], (decimal)reader["price"], (int)reader["category"], (int)reader["stock"]);
+                Bouquets.Add(bouquet);
+            }
+
+            dgBouquets.ItemsSource = Bouquets;
+            List<string> Nom_fleurs = new List<string>();
+            for (int i = 0; i<Bouquets.Count;i++)
+            {
+                Nom_fleurs.Add(Bouquets[i].Name);
+            }
+            Choix_ComboBox.ItemsSource = Nom_fleurs;
+            reader.Close();
+
         }
 
         private void FinaliseCommande_Button_Click(object sender, RoutedEventArgs e)
@@ -54,6 +76,7 @@ namespace Fleurs.Windows
             bool futur = !(selectedDate < date_du_jour);
             string bouquet_choisi;
             string dateDeLivraison;
+            int id_bouquetPage=-1;
             if (selectedDate.HasValue && !string.IsNullOrEmpty(Choix_ComboBox.Text))
             {
                 dateDeLivraison = selectedDate.Value.ToString("yyyy-MM-dd");
@@ -62,28 +85,14 @@ namespace Fleurs.Windows
                 dureeEnJ_int = Convert.ToInt32(dureeEnJ_str) + 1;
                 futur = !(selectedDate < date_du_jour);
                 bouquet_choisi = Choix_ComboBox.Text;
-                float prix;
-                switch(bouquet_choisi)
+                decimal prix=-1;
+                for(int i=0; i < Bouquets.Count; i++)
                 {
-                    case "Gros Merci":
-                        prix = 45;
-                        break;
-                    case "L’amoureux":
-                        prix = 65;
-                        break;
-                    case "L’Exotique":
-                        prix = 40;
-                        break;
-                    case "Maman Arrangement":
-                        prix = 80;
-                        break;
-                    case "Vive la mariée":
-                        prix = 120;
-                        break;
-                    default:
-                        prix = -1;
-                        break;
-                        ;
+                    if(Bouquets[i].Name==bouquet_choisi)
+                    {
+                        id_bouquetPage = Bouquets[i].Id;
+                        prix = Bouquets[i].Price;
+                    }
                 }
                 bool en_stock = false;
                 MySqlCommand command = connection.CreateCommand();
@@ -98,7 +107,7 @@ namespace Fleurs.Windows
                 {                   
                     if(en_stock)
                     {
-                        Finalisation_Commande fin_de_commande = new Finalisation_Commande(emailPage, typePage, bouquet_choisi, "CC",dateDeLivraison, prix);
+                        Finalisation_Commande fin_de_commande = new Finalisation_Commande(emailPage, typePage, bouquet_choisi, "CC",dateDeLivraison, prix, id_bouquetPage);
                         this.Content = fin_de_commande;
                     }
                     else
@@ -112,7 +121,7 @@ namespace Fleurs.Windows
                     {
                         if (MessageBox.Show("Votre commande à été effectué moins de trois jours avant la date de livraison. Il est possible que nous ayons des problèmes de stocks. Voulez vous quand même poursuivre votre commande ?", "Risque de pénurie", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                         {
-                            Finalisation_Commande fin_de_commande = new Finalisation_Commande(emailPage, typePage, bouquet_choisi, "VINV", dateDeLivraison, prix);
+                            Finalisation_Commande fin_de_commande = new Finalisation_Commande(emailPage, typePage, bouquet_choisi, "VINV", dateDeLivraison, prix, id_bouquetPage);
                             this.Content = fin_de_commande;
                         }
                     }
@@ -138,6 +147,26 @@ namespace Fleurs.Windows
         {
             Choix_Perso_standard choix_du_type_de_bouquet = new Choix_Perso_standard(emailPage);
             this.Content = choix_du_type_de_bouquet;
+        }
+        private class Bouquet
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
+            public int Category { get; set; }
+            public int Stock { get; set; }
+
+
+            public Bouquet(int id, string name, string description, decimal price, int category, int stock)
+            {
+                this.Id = id;
+                this.Name = name;
+                this.Description = description;
+                this.Price = price;
+                this.Category = category;
+                this.Stock = stock;
+            }
         }
     }
 }

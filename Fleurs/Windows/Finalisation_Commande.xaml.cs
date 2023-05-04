@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Reflection.PortableExecutable;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace Fleurs.Windows
 {
@@ -40,22 +41,44 @@ namespace Fleurs.Windows
         string Message;
         string reduction;
         string wishPage;
+        int bouquet_idPage;
+
+        List<Shop> shops = new List<Shop>();
 
         string connectionString;
         MySqlConnection connection;
-        public Finalisation_Commande(string email, string type, string bouquet, string etat, string dateDeLivraison, float prix)
+        public Finalisation_Commande(string email, string type, string bouquet, string etat, string dateDeLivraison, decimal prix, int bouquet_id)
         {
             emailPage = email;
             typePage = type;
             bouquetPage = bouquet;
             etatPage = etat;
             dateDeLivraisonPage = dateDeLivraison;
+            bouquet_idPage = bouquet_id;
             prixPage = Convert.ToDouble(prix);
             InitializeComponent();
             connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             //connectionString = "SERVER=localhost;PORT=3306;DATABASE=Fleurs;UID=root;PASSWORD=root;";
             connection = new MySqlConnection(connectionString);
             connection.Open();
+
+            shops = new List<Shop>();
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM shops;";
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Shop shop = new Shop((int)reader["id"], (string)reader["city"]);
+                shops.Add(shop);
+            }
+            reader.Close();
+            List<string> Nom_shop = new List<string>();
+            for (int i = 0; i < shops.Count; i++)
+            {
+                Nom_shop.Add(shops[i].City);
+            }
+            ChoixM_ComboBox.ItemsSource = Nom_shop;
         }
         public Finalisation_Commande(string email, string type, string wish, string etat, string dateDeLivraison, double budget)
         {
@@ -70,12 +93,30 @@ namespace Fleurs.Windows
             //connectionString = "SERVER=localhost;PORT=3306;DATABASE=Fleurs;UID=root;PASSWORD=root;";
             connection = new MySqlConnection(connectionString);
             connection.Open();
+
+            shops = new List<Shop>();
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM shops;";
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Shop shop = new Shop((int)reader["id"], (string)reader["city"]);
+                shops.Add(shop);
+            }
+            reader.Close();
+            List<string> Nom_shop = new List<string>();
+            for (int i = 0; i < shops.Count; i++)
+            {
+                Nom_shop.Add(shops[i].City);
+            }
+            ChoixM_ComboBox.ItemsSource = Nom_shop;
         }
         private void Retour_Button_Click(object sender, RoutedEventArgs e)
         {
             if (typePage == "CS")
             {
-                Choix_Bouquet_Personnalise choix_standard = new Choix_Bouquet_Personnalise(emailPage, typePage);
+                Choix_Bouquet_Standard choix_standard = new Choix_Bouquet_Standard(emailPage, typePage);
                 this.Content = choix_standard;
             }
             else if (typePage == "CP")
@@ -101,6 +142,10 @@ namespace Fleurs.Windows
             else if(string.IsNullOrEmpty(Message_TextBox.Text))
             {
                 MessageBox.Show("Veuillez entrer un message", "Message invalide", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else if (string.IsNullOrEmpty(ChoixM_ComboBox.Text))
+            {
+                MessageBox.Show("Veuillez entrer un magasin", "Message invalide", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
@@ -154,8 +199,10 @@ namespace Fleurs.Windows
                         else
                         {
                             PayementInfoToDB(prix);
-                            Fleurs.MainWindow mainWindow = new Fleurs.MainWindow();
-                            this.Content = mainWindow.Content;
+                            //Process.Start(Application.ResourceAssembly.Location);
+                            Application.Current.Shutdown();
+                            //Fleurs.MainWindow mainWindow = new Fleurs.MainWindow();
+                            //this.Content = mainWindow.Content;
                         }
                         break;
                     case "BRONZE":
@@ -193,6 +240,10 @@ namespace Fleurs.Windows
         public void PayementInfoToDB(double prix)
         {
             int id = finfIdClient();
+            int id_order = -1;
+            int address_exist = -1;
+            int id_address = -1;
+            int id_shop = -1;
             MySqlCommand command = connection.CreateCommand();
             MySqlDataReader reader;
             command.CommandText = $"UPDATE bouquets " +
@@ -200,24 +251,72 @@ namespace Fleurs.Windows
                     $"WHERE name='{bouquetPage}';";
             reader = command.ExecuteReader();
             reader.Close();
+
+            command.CommandText = $"SELECT COUNT(*) FROM address WHERE complement='{Complement_TextBox.Text}' AND street='{Adresse_TextBox.Text}'  AND city='{Ville_TextBox.Text}' AND postal_code='{CodePostale_TextBox.Text}';";
+            reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+                address_exist = reader.GetInt32(0);
+            }
+            reader.Close();
+            if (address_exist<1)
+            {
+                command.CommandText = $"INSERT INTO address (complement, street, city, postal_code)" +
+                    $" VALUES('{Complement_TextBox.Text}', '{Adresse_TextBox.Text}', '{Ville_TextBox.Text}', {CodePostale_TextBox.Text});";
+                reader = command.ExecuteReader();
+                reader.Close();
+            }
+            command.CommandText = $"SELECT id FROM address WHERE " +
+                $"complement='{Complement_TextBox.Text}' AND street='{Adresse_TextBox.Text}' " +
+                $"AND city='{Ville_TextBox.Text}' AND postal_code={CodePostale_TextBox.Text};";
+
+            reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                id_address = reader.GetInt32(0);
+            }
+            reader.Close();
+
+
+            for (int i = 0; i < shops.Count; i++)
+            {
+                if (shops[i].City == ChoixM_ComboBox.Text)
+                {
+                    id_shop = shops[i].Id;
+                }
+            }
+
             if (typePage == "CS")
             {
                 command.CommandText = $"INSERT INTO orders " +
-                    $"(client_id, address, delivery, max_price, message, status, type) " +
-                    $"VALUES({id},2,'{dateDeLivraisonPage}',{prix.ToString().Replace(",",".")},'{Message}','{etatPage}','{typePage}');";//voir pour les address
+                    $"(client_id, address, delivery, max_price, message, status, type, shop) " +
+                    $"VALUES({id},{id_address},'{dateDeLivraisonPage}',{prix.ToString().Replace(",",".")},'{Message}','{etatPage}','{typePage}',{id_shop});";//voir pour les address
                 reader = command.ExecuteReader();
                 reader.Close();
+                command.CommandText = $"SELECT id FROM orders WHERE " +
+                    $"client_id={id} AND address={id_address} AND delivery='{dateDeLivraisonPage}' AND max_price={prix.ToString().Replace(",", ".")} AND " +
+                    $"message='{Message}' AND status='{etatPage}' AND type='{typePage}'";
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    id_order = reader.GetInt32(0);
+                }
+                reader.Close();
+                command.CommandText = $"INSERT INTO order_bouquets (order_id, bouquet_id, quantity) VALUES({id_order},{bouquet_idPage},1)";//Ajt le bouquet_id
+                reader = command.ExecuteReader();
+                reader.Close();
+
             }
             else
             {
                 command.CommandText = $"INSERT INTO orders " +
-                    $"(client_id, address, delivery, max_price, message, status, type, wishes) " +
-                    $"VALUES({id},2,'{dateDeLivraisonPage}',{prix.ToString().Replace(",", ".")},'{Message}','{etatPage}','{typePage}','{wishPage}');";//voir pour les address
+                    $"(client_id, address, delivery, max_price, message, status, type, wishes, shop) " +
+                    $"VALUES({id},{id_address},'{dateDeLivraisonPage}',{prix.ToString().Replace(",", ".")},'{Message}','{etatPage}','{typePage}','{wishPage}', {id_shop});";//voir pour les address
                 reader = command.ExecuteReader();
                 reader.Close();
             }
         }
-        public int finfIdClient()
+        public int finfIdClient()//faire la même avec tout les id
         {
             int id=-1;
             MySqlCommand command = connection.CreateCommand();
@@ -230,6 +329,18 @@ namespace Fleurs.Windows
             }
             reader.Close();
             return id;
+        }
+        private class Shop
+        {
+            public int Id { get; set; }
+            public string City { get; set; }
+            public Shop(int id, string city)
+            {
+                this.Id = id;
+                this.City = city;
+            }
+
+
         }
     }
 }

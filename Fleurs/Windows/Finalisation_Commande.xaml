@@ -19,6 +19,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+
         </Grid.RowDefinitions>
         <TextBlock 
             Grid.Row="0"
@@ -56,9 +58,27 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="20"
-            Text="Ville"/>
+            Text="Complement d'adresse"/>
         <TextBox
             Grid.Row="2"
+            Grid.Column="1"
+            TextWrapping="WrapWithOverflow"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="25"
+            Width="200"
+            x:Name="Complement_TextBox"
+            />
+        <TextBlock 
+            Grid.Row="3"
+            Grid.Column="0"
+            TextWrapping="WrapWithOverflow"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="20"
+            Text="Ville"/>
+        <TextBox
+            Grid.Row="3"
             Grid.Column="1"
             TextWrapping="WrapWithOverflow"
             HorizontalAlignment="Center"
@@ -68,7 +88,7 @@
             x:Name="Ville_TextBox"
             />
         <TextBlock 
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="0"
             TextWrapping="WrapWithOverflow"
             HorizontalAlignment="Center"
@@ -76,7 +96,7 @@
             FontSize="20"
             Text="Code Postale"/>
         <TextBox
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="1"
             TextWrapping="WrapWithOverflow"
             HorizontalAlignment="Center"
@@ -88,7 +108,7 @@
             PreviewTextInput="NumberValidationTextBox"
             />
         <TextBlock 
-            Grid.Row="4"
+            Grid.Row="5"
             Grid.Column="0"
             TextWrapping="WrapWithOverflow"
             HorizontalAlignment="Center"
@@ -96,7 +116,7 @@
             FontSize="20"
             Text="Message accompagnant l’arrangement floral"/>
         <TextBox
-            Grid.Row="4"
+            Grid.Row="5"
             Grid.Column="1"
             TextWrapping="Wrap"
             HorizontalAlignment="Center"
@@ -107,17 +127,34 @@
             x:Name="Message_TextBox"
             AcceptsReturn="True" 
             />
-        <Button
+
+
+        <Grid Grid.Row="6" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button
             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
             Style="{StaticResource MaterialDesignIconButton}"
             ToolTip="MaterialDesignIconButton"
             x:Name="Retour_Button"
             Grid.Column="0"
-            Grid.Row="5"
+            Grid.Row="0"
             Click="Retour_Button_Click">
-            <materialDesign:PackIcon
+                <materialDesign:PackIcon
             Kind="KeyboardBackspace" />
-        </Button>
+            </Button>
+            <ComboBox
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            materialDesign:HintAssist.Hint="Choix du magasin"
+            x:Name="ChoixM_ComboBox"
+            ItemsSource="{Binding Nom_fleurs}"   
+            />
+        </Grid>
         <Button
             Grid.Row="6"
             Grid.Column="1"            
