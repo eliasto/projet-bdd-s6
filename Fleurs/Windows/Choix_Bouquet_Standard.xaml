@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Fleurs.Windows.Choix_Bouquet_Personnalise"
+﻿<UserControl x:Class="Fleurs.Windows.Choix_Bouquet_Standard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,23 +8,19 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Text="Votre Choix"
@@ -34,255 +30,80 @@
             FontStyle="Italic"
             FontWeight="Bold"
             />
-        <ComboBox
-            Grid.Row="2"
+            <ComboBox
+            Grid.Row="1"
             Grid.Column="0"
-            Grid.RowSpan="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             materialDesign:HintAssist.Hint="Choix du bouquet"
-            x:Name="Choix_ComboBox">
-            <ComboBoxItem
-                Content="Gros Merci" />
-            <ComboBoxItem
-                Content="L’amoureux" />
-            <ComboBoxItem
-                Content="L’Exotique" />
-            <ComboBoxItem
-                Content="Maman" />
-            <ComboBoxItem
-                Content="Vive la mariée" />
-        </ComboBox>
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="1"
-            Text="Nom du bouquet"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"  
-            TextWrapping="WrapWithOverflow"
-            FontStyle="Italic"
-            FontWeight="Bold"
+            x:Name="Choix_ComboBox"
+            ItemsSource="{Binding Nom_fleurs}"   
             />
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="2"
-            Text="Contient"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            FontStyle="Italic"
-            FontWeight="Bold"
-            />
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="3"
-            Text="Occasion"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            FontStyle="Italic"
-            FontWeight="Bold"
-            />
-        <TextBlock
-            Grid.Row="0"
-            Grid.Column="4"
-            Text="Prix"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            FontStyle="Italic"
-            FontWeight="Bold"
-            />
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="1"
-            Text="Gros Merci"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="2"
-            Text="Arrangement floral avec marguerites et verdure"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="3"
-            Text="Toute occasion"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="4"
-            Text="45 €"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            />
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="1"
-            Text="L'amoureux"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="2"
-            Text="Arrangement floral avec roses blanches et roses"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="3"
-            Text="St-Valentin"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="4"
-            Text="65 €"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            />
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="1"
-            Text="L’Exotique"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="2"
-            Text="Arrangement floral avec ginger, oiseaux du paradis, roses et genet"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="3"
-            Text="Toute occasion"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="4"
-            Text="40 €"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="1"
-            Text="Maman"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="2"
-            Text="Arrangement floral avec gerbera, roses blanches, lys et alstroméria"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="3"
-            Text="Fête des mères"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="4"
-            Text="80 €"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="1"
-            Text="Vive la mariée"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="2"
-            Text="Arrangement floral avec lys et orchidées"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="3"
-            Text="Mariage"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            TextWrapping="WrapWithOverflow"
-            />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="4"
-            Text="120 €"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            />
-        <Button
+            <DataGrid
+                Grid.Row="0"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Grid.RowSpan="2"
+                x:Name="dgBouquets"
+                FontSize="14"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding bouquets}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                            Binding="{Binding Name}"
+                            Header="Name" 
+                            IsReadOnly="True"
+                            />
+                    <DataGridTextColumn
+                    Binding="{Binding Description}"
+                    Header="Descripion" 
+                    IsReadOnly="True"/>
+                    <DataGridTextColumn
+                            Binding="{Binding Price}"
+                            Header="Prix" 
+                        IsReadOnly="True"/>
+                    <DataGridTextColumn
+                    Binding="{Binding Stock}"
+                    Header="Stock" 
+                    IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button
             Grid.Column="1"
             Grid.Row="6"
-            Grid.ColumnSpan="2"
-            Width="250"
+            Width="350"
             Content="Finaliser la commande"  
             x:Name="FinaliseCommande_Button"
             Click="FinaliseCommande_Button_Click"
             />
-        <Button
+            <Button
             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
             Style="{StaticResource MaterialDesignIconButton}"
             ToolTip="MaterialDesignIconButton"
             x:Name="Retour_Button"
             Grid.Column="0"
             Grid.Row="6"
-            Grid.ColumnSpan="2"
             Click="Retour_Button_Click">
             <materialDesign:PackIcon
             Kind="KeyboardBackspace" />
-        </Button>
-        <DatePicker
+            </Button>
+
+            <DatePicker
             x:Name="DateDeLivraison_DP"
-            Width="100"
+            Width="115"
             materialDesign:CalendarAssist.IsHeaderVisible="False"
             materialDesign:HintAssist.Hint="Date de livraison"
-            Grid.Column="3"
+            Grid.Column="2"
             Grid.Row="6">
-            <DatePicker.SelectedDate>
-                <Binding
+                <DatePicker.SelectedDate>
+                    <Binding
                 Path="FutureValidatingDate"
                     UpdateSourceTrigger="PropertyChanged">
-                </Binding>
-            </DatePicker.SelectedDate>
-        </DatePicker>
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+        </Grid>
     </Grid>
 </UserControl>

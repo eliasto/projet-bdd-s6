@@ -35,8 +35,11 @@ namespace Fleurs.Windows
 
         private void B_Standard_Button_Click(object sender, RoutedEventArgs e)
         {
-            Choix_Bouquet_Personnalise choix_Bouquet_Standard = new Choix_Bouquet_Personnalise(emailPage, "CS");
+            Choix_Bouquet_Standard choix_Bouquet_Standard = new Choix_Bouquet_Standard(emailPage, "CS");
             this.Content = choix_Bouquet_Standard;
+            //Test test = new Test();
+            //this.Content = test;
+
         }
     }
 }
