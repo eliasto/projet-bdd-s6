@@ -1,4 +1,4 @@
-﻿using Fleurs.Windows;
+using Fleurs.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
 
@@ -36,6 +35,7 @@ namespace Fleurs
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();
+            //this.Content = new Home();
         }
 
         private void Connection_Button_Click(object sender, RoutedEventArgs e)
@@ -57,13 +57,20 @@ namespace Fleurs
                     {
                         string password_mysql = (string)reader["password"];
                         string name_mysql = (string)reader["name"];
+                        bool employee = (bool)reader["employee"];
+
 
                         if (password_mysql == password)
                         {
-                            Choix_Perso_standard choix_du_type_de_bouquet = new Choix_Perso_standard(email);
-                            this.Content = choix_du_type_de_bouquet;
-                            //this.Content = new Home();
-                            //MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
+                        if(employee)
+                            {
+                                this.Content = new Home();
+                            }
+                            else
+                            {
+                                this.Content = new Choix_Perso_standard(email);
+                            }
+                            MessageBox.Show("Bonjour " + name_mysql + " ! Bienvenue sur l'extranet de Chez Rose.", "Vous êtes connecté", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
@@ -78,18 +85,24 @@ namespace Fleurs
                 reader.Close();
                 if (compteur == 0)
                 {
-                    var result = MessageBox.Show("Le compte associé à "+email+" n'existe pas sur notre extranet.\nSouhaitez-vous créer un compte avec cette adresse e-mail ?", "Compte inconnu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var result = MessageBox.Show("Le compte associé à " + email + " n'existe pas sur notre extranet.\nSouhaitez-vous créer un compte avec cette adresse e-mail ?", "Compte inconnu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Creation_Compte creation_Compte = new Creation_Compte();
-                        this.Content = creation_Compte;
+                        this.Content = new Register();
                     }
                 }
-            
-            } catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 Trace.WriteLine(ex);
             }
-         }
+        }
+
+        private void Redirect_Register_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new Register();
+        }
     }
 }
+       

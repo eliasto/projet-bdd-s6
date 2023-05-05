@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Fleurs.Windows
 {
     /// <summary>
-    /// Logique d'interaction pour Creation_Compte.xaml
+    /// Logique d'interaction pour UserControl1.xaml
     /// </summary>
-    public partial class Creation_Compte : Page
+    public partial class UserControl1 : UserControl
     {
-        public Creation_Compte()
+        public UserControl1()
         {
             InitializeComponent();
         }

@@ -13,12 +13,25 @@
     <None Remove="Icon.png" />
     <None Remove="Lg_ChezRoseFleuriste_CMYK.png" />
     <None Remove="ouvrir-un-magasin-de-fleurs.jpg" />
+    <None Remove="ouvrir-un-magasin-de-fleurs_1.jpg" />
+    <None Remove="Windows\ouvrir-un-magasin-de-fleurs.jpg" />
+    <None Remove="Windows\ouvrir-un-magasin-de-fleurs_1.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignColors" Version="2.1.2" />
     <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ShowMeTheXAML" Version="2.0.0" />
   </ItemGroup>
 
@@ -28,6 +41,9 @@
     <Resource Include="Icon.png" />
     <Resource Include="Lg_ChezRoseFleuriste_CMYK.png" />
     <Resource Include="ouvrir-un-magasin-de-fleurs.jpg" />
+    <Resource Include="ouvrir-un-magasin-de-fleurs_1.jpg" />
+    <Resource Include="Windows\ouvrir-un-magasin-de-fleurs.jpg" />
+    <Resource Include="Windows\ouvrir-un-magasin-de-fleurs_1.jpg" />
   </ItemGroup>
 
 </Project>
