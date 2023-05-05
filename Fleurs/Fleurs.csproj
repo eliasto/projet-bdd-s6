@@ -13,6 +13,8 @@
     <None Remove="Lg_ChezRoseFleuriste_CMYK.png" />
     <None Remove="ouvrir-un-magasin-de-fleurs.jpg" />
     <None Remove="ouvrir-un-magasin-de-fleurs_1.jpg" />
+    <None Remove="Windows\ouvrir-un-magasin-de-fleurs.jpg" />
+    <None Remove="Windows\ouvrir-un-magasin-de-fleurs_1.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +40,8 @@
     <Resource Include="Lg_ChezRoseFleuriste_CMYK.png" />
     <Resource Include="ouvrir-un-magasin-de-fleurs.jpg" />
     <Resource Include="ouvrir-un-magasin-de-fleurs_1.jpg" />
+    <Resource Include="Windows\ouvrir-un-magasin-de-fleurs.jpg" />
+    <Resource Include="Windows\ouvrir-un-magasin-de-fleurs_1.jpg" />
   </ItemGroup>
 
 </Project>

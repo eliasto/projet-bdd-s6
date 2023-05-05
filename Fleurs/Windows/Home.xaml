@@ -16,6 +16,7 @@
     <Grid>
         <materialDesign:Card>
             <TabControl
+                x:Name="tab_control_home"
     HorizontalContentAlignment="Center"
     materialDesign:ColorZoneAssist.Mode="PrimaryLight"
     materialDesign:NavigationRailAssist.SelectionCornerRadius="50"
@@ -50,7 +51,7 @@
   AutoGenerateColumns="False"
   CanUserAddRows="False"
   HeadersVisibility="All"
-  ItemsSource="{Binding clients}">
+  >
                                         <DataGrid.Columns>
                                         <!-- by default a DataGridTextColumn will have the MaterialDesignDataGridTextColumnStyle and MaterialDesignDataGridTextColumnEditingStyle applied. See DataGridAssist.ApplyMaterialDesignColumnStyles attached property -->
                                         <DataGridTextColumn
@@ -74,7 +75,8 @@
                                             <DataGridTemplateColumn>
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <Button Content="Voir l'historique" Click="Show_History" Tag="{Binding id}" />
+                                                        <Button
+                                                            Content="Voir l'historique" Click="Show_History" Tag="{Binding id}" />
                                                     </DataTemplate>
                                                 </DataGridTemplateColumn.CellTemplate>
                                             </DataGridTemplateColumn>
@@ -197,16 +199,14 @@
             Text="Products" />
                         </StackPanel>
                     </TabItem.Header>
-                    <TextBlock>
-        <Run
-          Text="tab 3 content. Default look and behaviors." />
-        <LineBreak />
-        <LineBreak />
-        <Run
-          FontStyle="Italic">
-        Praesevzddvvvvvvvvvv
-      </Run>
-                    </TextBlock>
+                    <DataGrid
+                                        x:Name="products_data"
+  AutoGenerateColumns="True"
+  CanUserAddRows="False"
+  HeadersVisibility="All"
+  >
+                        
+                    </DataGrid>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
@@ -223,16 +223,49 @@
             Text="Orders" />
                         </StackPanel>
                     </TabItem.Header>
-                    <TextBlock>
-        <Run
-          Text="tab 4 content. Default look and behaviors." />
-        <LineBreak />
-        <LineBreak />
-        <Run
-          FontStyle="Italic">
-        Prfadsssssssssssssssbvdcas
-      </Run>
-                    </TextBlock>
+                    <Grid
+                        Margin="10,10,10,10"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="5*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                            Padding="5,5,5,5"
+                            Grid.Row="0"
+                            FontWeight="Bold"
+                            FontSize="20"
+                                TextWrapping="Wrap"
+                            Text="Historique des commandes" />
+                            <TextBlock
+                            Padding="5,5,5,5"
+                            Grid.Row="1"
+                            FontSize="14"
+                                TextWrapping="Wrap"
+                            Text="Choisir le client à insepecter les commandes" />
+                            <ComboBox
+                                Padding="5,5,5,5"
+                                x:Name="combobox_clients_orders"
+                                Grid.Row="2"
+                                >
+                                <ComboBoxItem IsSelected="True">Toutes les commandes</ComboBoxItem>
+                            </ComboBox>
+
+                        </Grid>
+                        <DataGrid
+                            Grid.Column="1"
+                        x:Name="orders_data"
+  CanUserAddRows="False"
+                        AutoGenerateColumns="True"
+  SelectionMode="Extended"
+  SelectionUnit="Cell" />
+                    </Grid>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>

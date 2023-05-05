@@ -40,8 +40,7 @@ namespace Fleurs.Windows
         string connectionString;
         MySqlConnection connection;
         MySqlConnection connection1;
-
-
+        List<Client> clients = new List<Client>();
 
         public Home()
         {
@@ -55,8 +54,6 @@ namespace Fleurs.Windows
             MySqlCommand command = connection.CreateCommand();
             command.CommandText = $"SELECT c.id, c.name, c.surname, c.email, c.phone, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients c LEFT JOIN orders o ON c.id = o.client_id GROUP BY c.id, c.name, c.surname, c.email, c.phone";
             MySqlDataReader reader = command.ExecuteReader();
-
-            List<Client> clients = new List<Client>();
 
             while (reader.Read())
             {
@@ -146,8 +143,86 @@ namespace Fleurs.Windows
             this.best_client_text.Text = text;
             this.best_client_image.Source = new BitmapImage(new Uri("https://blog.smile.io/content/images/2018/Do%20You%20Know%20Who%20Your%20Best%20Customers%20Are/Best-Customers-Feature.png"));
             reader.Close();
+            List<Products> products = new List<Products>();
+
+            command = connection1.CreateCommand();
+            command.CommandText = $"SELECT * FROM products;";
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                string type = "Accessoires";
+                string description = (string)reader["description"];
+                decimal price = (decimal)reader["price"];
+                int stock = (int)reader["stock"];
+                int start_month = 1;
+                int end_month = 12;
+                string category = "Aucune catégorie";
+                bool alert = (bool)reader["alert"];
+                products.Add(new Products(type, name,description,stock,price, start_month, end_month, category, alert));
+            }
+            reader.Close();
+
+            command = connection1.CreateCommand();
+            command.CommandText = $"SELECT * FROM flowers;";
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                string type = "Fleurs";
+                string description = "Aucune description";
+                decimal price = (decimal)reader["price"];
+                int stock = (int)reader["stock"];
+                int start_month = (int)reader["start_month"];
+                int end_month = (int)reader["end_month"];
+                string category = "Aucune catégorie";
+                bool alert = (bool)reader["alert"];
+                products.Add(new Products(type, name, description, stock, price, start_month, end_month, category, alert));
+            }
+            reader.Close();
 
 
+            command = connection1.CreateCommand();
+            command.CommandText = $"SELECT bouquets.name, bouquets.description, bouquets.price, bouquets.stock, bouquets.alert, category.name AS category FROM Fleurs.bouquets JOIN category ON bouquets.category = category.id;";
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                string type = "Bouquets";
+                string description = (string)reader["description"];
+                decimal price = (decimal)reader["price"];
+                int stock = (int)reader["stock"];
+                int start_month = 1;
+                int end_month = 12;
+                string category = (string)reader["category"];
+                bool alert = (bool)reader["alert"];
+                products.Add(new Products(type, name, description, stock, price, start_month, end_month, category, alert));
+            }
+            reader.Close();
+
+            Trace.WriteLine(products.Count());
+            products_data.ItemsSource = products;
+            orders_data.ItemsSource = products;
+
+            command = connection1.CreateCommand();
+            command.CommandText = $"SELECT * FROM orders;";
+            reader = command.ExecuteReader();
+            List<Orders> orders = new List<Orders>();
+
+            while (reader.Read())
+            {
+                
+
+            }
+
+            reader.Close();
+            foreach(Client client in clients)
+            {
+                combobox_clients_orders.Items.Add("#" + client.id + " " + client.name + " " + client.surname);
+            }
         }
 
         public async void generateBestShop(MySqlDataReader reader1)
@@ -171,7 +246,14 @@ namespace Fleurs.Windows
         {
             int id = (int)((Button)sender).Tag;
 
-            Trace.WriteLine(id);
+            foreach(Client client in clients)
+            {
+                if(client.id == id)
+                {
+                    combobox_clients_orders.SelectedItem = "#" + client.id + " " + client.name + " " + client.surname;
+                }
+            }
+            tab_control_home.SelectedIndex = 2;
         }
 
         private void Export_JSON(object sender, RoutedEventArgs e)
@@ -299,6 +381,7 @@ namespace Fleurs.Windows
 
 
         }
+
     }
 
     
@@ -373,9 +456,10 @@ namespace Fleurs.Windows
         public DateTime delivery { get; set; }
         public DateTime creation_time { get; set; }
         public string status { get; set; }
-        public int shop { get; set; }
-
-        public Orders(int id, int client_id, string type, string wishes, decimal max_price, string address, string message, DateTime delivery, DateTime creation_time, string status, int shop)
+        public string shop { get; set; }
+        public string content { get; set; }
+        
+        public Orders(int id, int client_id, string type, string wishes, decimal max_price, string address, string message, DateTime delivery, DateTime creation_time, string status, string shop, string content)
         {
             this.id = id;
             this.client_id = client_id;
@@ -388,8 +472,36 @@ namespace Fleurs.Windows
             this.creation_time = creation_time;
             this.status = status;
             this.shop = shop;
+            this.content = content;
         }
     }
 
+    public class Products
+    {
+        public string type { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public int stock { get; set; }
+        public decimal price { get; set; }
+        public int start_month { get; set; }
+        public int end_month { get; set; }
+        public string category { get; set; }  
+        public bool alert { get; set; }
+        
+        public Products(string type, string name, string description, int stock, decimal price, int start_month, int end_month, string category, bool alert)
+        {
+            this.type = type;
+            this.name = name;
+            this.description = description;
+            this.stock = stock;
+            this.price = price;
+            this.start_month = start_month;
+            this.end_month = end_month;
+            this.category = category;
+            this.alert = alert;
+        }
+        
+
+    }
 
 }
