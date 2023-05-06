@@ -87,5 +87,11 @@ namespace Fleurs.Windows
             }
 
         }
+
+        private void NoWish_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Bouquet_Perso_NoWish Skip = new Bouquet_Perso_NoWish(emailPage, typePage);
+            this.Content = Skip;
+        }
     }
 }

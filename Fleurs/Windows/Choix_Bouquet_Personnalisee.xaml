@@ -9,8 +9,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -21,7 +23,7 @@
         <TextBlock
             Grid.Column="0"
             Grid.Row="0"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="5"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="50"
@@ -43,6 +45,7 @@
             TextWrapping="Wrap"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            Grid.ColumnSpan="2"
             FontSize="15"
             Width="300"
             Height="70"
@@ -64,6 +67,7 @@
             TextWrapping="WrapWithOverflow"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            Grid.ColumnSpan="2"
             FontSize="20"
             Width="200"
             x:Name="Budget_TextBox"
@@ -108,11 +112,34 @@
             
             
         <Button
-            Grid.Column="2"
+            Grid.Column="1"
             Grid.Row="6"
             Content="Finaliser la commande"  
             x:Name="FinaliseCommande_Button"
             Click="FinaliseCommande_Button_Click"
             />
+        <Button
+            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+            Style="{StaticResource MaterialDesignIconButton}"
+            ToolTip="MaterialDesignIconButton"
+            Grid.Column="2"
+            Grid.Row="3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            x:Name="NoWish_Button"
+            Click="NoWish_Button_Click"
+            >
+            <materialDesign:PackIcon Kind="SkipNext" />
+        </Button>
+        <TextBlock
+            Text="Si vous savez deja ce que vous prenez"
+            TextWrapping="WrapWithOverflow"
+            Grid.Column="2"
+            Grid.Row="4"
+            FontSize="15"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center"
+            />
+
     </Grid>
 </UserControl>
