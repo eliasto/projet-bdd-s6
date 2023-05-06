@@ -235,6 +235,8 @@
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+
                             </Grid.RowDefinitions>
                             <TextBlock
                             Padding="5,5,5,5"
@@ -256,6 +258,12 @@
                                 >
                                 <ComboBoxItem IsSelected="True">Toutes les commandes</ComboBoxItem>
                             </ComboBox>
+                            <Button
+                                Margin="0,20,0,0"
+                                Grid.Row="3"
+                             Content="Valider" Click="Validate_Choice_ComboBox" />
+
+
 
                         </Grid>
                         <DataGrid

@@ -41,6 +41,7 @@ namespace Fleurs.Windows
         MySqlConnection connection;
         MySqlConnection connection1;
         List<Client> clients = new List<Client>();
+        List<Orders> orders = new List<Orders>();
 
         public Home()
         {
@@ -93,7 +94,7 @@ namespace Fleurs.Windows
             reader = command.ExecuteReader();
             while (reader.Read())
             {
-                decimal average = (decimal)reader["AVG(bouquets.price)"];
+                decimal average = reader["AVG(bouquets.price)"] == DBNull.Value ? 0 : (decimal)reader["AVG(bouquets.price)"];
                 this.average_price_bouquet_title.Text = "Prix moyen d'un bouquet";
                 this.average_price_bouquet_text.Text = "Le prix moyen d'un bouquet d'un panier type d'un client est de "+ average+" €.";
                 this.average_price_bouquet_image.Source = new BitmapImage(new Uri("https://i.pinimg.com/736x/e7/99/b9/e799b9b79a896eeec05b1fff13d86f91.jpg"));
@@ -205,18 +206,50 @@ namespace Fleurs.Windows
 
             Trace.WriteLine(products.Count());
             products_data.ItemsSource = products;
-            orders_data.ItemsSource = products;
 
             command = connection1.CreateCommand();
-            command.CommandText = $"SELECT * FROM orders;";
+            command.CommandText = $"SELECT orders.id,orders.client_id,orders.type,orders.wishes,orders.max_price,orders.address,orders.message,orders.delivery,orders.creation_date,orders.status,shops.city as shop FROM orders JOIN shops ON orders.shop = shops.id;";
             reader = command.ExecuteReader();
-            List<Orders> orders = new List<Orders>();
 
             while (reader.Read())
             {
-                
+
+                string wishes;
+                decimal max_price;
+                if (reader["wishes"] == DBNull.Value)
+                {
+                    wishes = "Aucun voeu"; // ou null, selon vos besoins
+                }
+                else
+                {
+                    wishes = (string)reader["wishes"];
+                }
+
+                if (reader["max_price"] == DBNull.Value)
+                {
+                    max_price = 0; // ou null, selon vos besoins
+                }
+                else
+                {
+                    max_price = (decimal)reader["max_price"];
+                }
+
+                int id = (int)reader["id"];
+                int client_id = (int)reader["client_id"];
+                string type = (string)reader["type"];
+                int address = (int)reader["address"];
+                string message = (string)reader["message"];
+                DateTime delivery = (DateTime)reader["delivery"];
+                DateTime creation_time = (DateTime)reader["creation_date"];
+                string status = (string)reader["status"];
+                string shop = (string)reader["shop"];
+                string content = ContentOfTheOrder(id);
+
+                orders.Add(new Orders(id, client_id, type, wishes, max_price, address, message, delivery, creation_time, status, shop, content));
 
             }
+
+            orders_data.ItemsSource = orders;
 
             reader.Close();
             foreach(Client client in clients)
@@ -251,10 +284,49 @@ namespace Fleurs.Windows
                 if(client.id == id)
                 {
                     combobox_clients_orders.SelectedItem = "#" + client.id + " " + client.name + " " + client.surname;
+                    List<Orders> newOrders = new List<Orders>();
+                    foreach(Orders order in orders)
+                    {
+                        if(order.client_id == id)
+                        {
+                            newOrders.Add(order);
+                        }
+                    }
+
+                    orders_data.ItemsSource = newOrders;
                 }
             }
             tab_control_home.SelectedIndex = 2;
         }
+
+        private void Validate_Choice_ComboBox(object sender, RoutedEventArgs e)
+        {
+            string comboboxValue = combobox_clients_orders.SelectedItem.ToString();
+            Trace.WriteLine(comboboxValue);
+            if(comboboxValue != "System.Windows.Controls.ComboBoxItem : Toutes les commandes")
+            {
+                string idClientSplitted = comboboxValue.Split('#')[1].Split(' ')[0];
+                Trace.WriteLine(idClientSplitted);
+                List<Orders> newOrders = new List<Orders>();
+                foreach (Orders order in orders)
+                {
+                    if (order.client_id == Convert.ToInt32(idClientSplitted))
+                    {
+                        newOrders.Add(order);
+                    }
+                }
+
+                orders_data.ItemsSource = newOrders;
+            }
+            else
+            {
+                orders_data.ItemsSource = orders;
+            }
+
+            
+               
+        }
+
 
         private void Export_JSON(object sender, RoutedEventArgs e)
         {
@@ -382,6 +454,53 @@ namespace Fleurs.Windows
 
         }
 
+        private string ContentOfTheOrder (int order_id)
+        {
+            string content = "";
+
+            MySqlConnection conne = new MySqlConnection(connectionString);
+            conne.Open();
+            MySqlCommand command = conne.CreateCommand();
+            command.CommandText = $"SELECT order_products.quantity, products.name FROM order_products JOIN products ON products.id = order_products.product_id WHERE order_products.order_id = " + order_id + ";";
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                int quantity = (int)reader["quantity"];
+                content += "\n" + quantity + "x " + name;
+            }
+
+            reader.Close();
+
+            command.CommandText = $"SELECT order_flowers.quantity, flowers.name FROM order_flowers JOIN flowers ON flowers.id = order_flowers.flower_id WHERE order_flowers.order_id = "+order_id+";";
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                int quantity = (int)reader["quantity"];
+                content += "\n" + quantity + "x " + name;
+            }
+
+            reader.Close();
+
+            command.CommandText = $"SELECT order_bouquets.quantity, bouquets.name FROM order_bouquets JOIN bouquets ON bouquets.id = order_bouquets.bouquet_id WHERE order_bouquets.order_id = " + order_id + ";";
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string name = (string)reader["name"];
+                int quantity = (int)reader["quantity"];
+                content += "\n" + quantity + "x " + name;
+            }
+
+            reader.Close();
+
+            return content;
+
+        }
+
     }
 
     
@@ -451,7 +570,7 @@ namespace Fleurs.Windows
         public string type { get; set; }
         public string wishes { get; set; }
         public decimal max_price { get; set; }
-        public string address { get; set; } 
+        public int address { get; set; } 
         public string message { get; set; } 
         public DateTime delivery { get; set; }
         public DateTime creation_time { get; set; }
@@ -459,7 +578,7 @@ namespace Fleurs.Windows
         public string shop { get; set; }
         public string content { get; set; }
         
-        public Orders(int id, int client_id, string type, string wishes, decimal max_price, string address, string message, DateTime delivery, DateTime creation_time, string status, string shop, string content)
+        public Orders(int id, int client_id, string type, string wishes, decimal max_price, int address, string message, DateTime delivery, DateTime creation_time, string status, string shop, string content)
         {
             this.id = id;
             this.client_id = client_id;
