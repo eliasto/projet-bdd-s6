@@ -30,7 +30,7 @@ namespace Fleurs.Windows
         string statutPage;
         string bouquet;
 
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
         private List<Bouquet> Bouquets { get; set; }
 
@@ -38,7 +38,6 @@ namespace Fleurs.Windows
         {
             emailPage = email;
             typePage= type;
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();

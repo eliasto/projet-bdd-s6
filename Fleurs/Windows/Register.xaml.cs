@@ -28,12 +28,11 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Register : UserControl
     {
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
 
         public Register()
         {
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();
@@ -44,7 +43,7 @@ namespace Fleurs.Windows
         private void Redirect_Register_Click(object sender, RoutedEventArgs e)
         {
             //TODO : ça ne fonctionne pas lol
-            this.Content = new MainWindow();
+            this.Content = new Login();
         }
 
         private void next_step_3_Click(object sender, RoutedEventArgs e)
