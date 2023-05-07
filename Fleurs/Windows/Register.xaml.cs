@@ -44,7 +44,7 @@ namespace Fleurs.Windows
         private void Redirect_Register_Click(object sender, RoutedEventArgs e)
         {
             //TODO : ça ne fonctionne pas lol
-            this.Content = new MainWindow();
+            this.Content = new Login();
         }
 
         private void next_step_3_Click(object sender, RoutedEventArgs e)
