@@ -230,4 +230,13 @@ BEGIN
     END IF;
 END $$
 
+CREATE TRIGGER CP_in_CPAV
+BEFORE INSERT ON orders
+FOR EACH ROW
+BEGIN
+    IF NEW.type = 'CP' THEN
+        SET NEW.status = 'CPAV';
+    END IF;
+END $$
+
 DELIMITER ;
