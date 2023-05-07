@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-namespace Fleurs.Utils
+﻿namespace Fleurs.Utils
 {
     public class Utils
     {
