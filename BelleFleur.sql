@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS shops (
 );
 
 CREATE TABLE IF NOT EXISTS orders (
-  id int(11) NOT NULL,
+  id int(11) NOT NULL AUTO_INCREMENT,
   client_id int(11) NOT NULL,
   type enum('CP','CS') NOT NULL,
   wishes text,
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS order_products (
 
 DELIMITER $$
 
-CREATE TRIGGER alert_stock_flowers
+CREATE TRIGGER alert_stock_flowers_update
 BEFORE UPDATE ON flowers
 FOR EACH ROW 
 BEGIN
@@ -150,7 +150,23 @@ BEGIN
     END IF;
 END $$
 
-CREATE TRIGGER alert_stock_products
+CREATE TRIGGER alert_stock_flowers_insert
+BEFORE INSERT ON flowers
+FOR EACH ROW
+BEGIN
+    DECLARE current_stock INT;
+    DECLARE current_alert INT;
+    SET current_stock = NEW.stock;
+    SET current_alert = NEW.alert;
+    IF current_stock < 5 AND current_alert = 0 THEN
+        SET NEW.alert = 1;
+    END IF;
+    IF current_stock >= 5 AND current_alert = 1 THEN
+        SET NEW.alert = 0;
+    END IF;
+END $$
+
+CREATE TRIGGER alert_stock_products_update
 BEFORE UPDATE ON products
 FOR EACH ROW 
 BEGIN
@@ -166,9 +182,41 @@ BEGIN
     END IF;
 END $$
 
-CREATE TRIGGER alert_stock_bouquets
+CREATE TRIGGER alert_stock_products_insert
+BEFORE INSERT ON products
+FOR EACH ROW
+BEGIN
+    DECLARE current_stock INT;
+    DECLARE current_alert INT;
+    SET current_stock = NEW.stock;
+    SET current_alert = NEW.alert;
+    IF current_stock < 5 AND current_alert = 0 THEN
+        SET NEW.alert = 1;
+    END IF;
+    IF current_stock >= 5 AND current_alert = 1 THEN
+        SET NEW.alert = 0;
+    END IF;
+END $$
+
+CREATE TRIGGER alert_stock_bouquets_update
 BEFORE UPDATE ON bouquets
 FOR EACH ROW 
+BEGIN
+    DECLARE current_stock INT;
+    DECLARE current_alert INT;
+    SET current_stock = NEW.stock;
+    SET current_alert = NEW.alert;
+    IF current_stock < 5 AND current_alert = 0 THEN
+        SET NEW.alert = 1;
+    END IF;
+    IF current_stock >= 5 AND current_alert = 1 THEN
+        SET NEW.alert = 0;
+    END IF;
+END $$
+
+CREATE TRIGGER alert_stock_bouquets_insert
+BEFORE INSERT ON bouquets
+FOR EACH ROW
 BEGIN
     DECLARE current_stock INT;
     DECLARE current_alert INT;

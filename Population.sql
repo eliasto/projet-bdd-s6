@@ -28,7 +28,7 @@ INSERT INTO credit_card (name, holder, number, expiry, ccv) VALUES
 
 # Table clients
 INSERT INTO clients (name, surname, phone, email, password, address, credit_card, employee) VALUES
-('Elias', 'Tourneux', '0661531991', 'me@eliqs.dev', 'toutou&67', 1, 1, 0),
+('Elias', 'Tourneux', '0661531991', 'me@eliqs.dev', 'toutou&67', 1, 1, 1),
 ('Marc', 'Viallard', '0645123456', 'marc.viallard@hotmail.com', 'marximarc*$4442', 2,2, 0),
 ('Emma', 'Durand', '0678563214', 'emma.durand@gmail.com', 'passw0rd', 3, 3, 0),
 ('Lucie', 'Lefebvre', '0687456321', 'lucie.lefebvre@hotmail.com', '123456789', 4, 4, 0),
