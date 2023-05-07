@@ -16,11 +16,17 @@
 
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock
+
+            <Grid Grid.Row="0" Grid.Column="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Text="Votre Choix"
@@ -30,7 +36,7 @@
             FontStyle="Italic"
             FontWeight="Bold"
             />
-            <ComboBox
+                <ComboBox
             Grid.Row="1"
             Grid.Column="0"
             HorizontalAlignment="Center"
@@ -39,11 +45,11 @@
             x:Name="Choix_ComboBox"
             ItemsSource="{Binding Nom_fleurs}"   
             />
+            </Grid>
             <DataGrid
                 Grid.Row="0"
                 Grid.Column="1"
                 Grid.ColumnSpan="2"
-                Grid.RowSpan="2"
                 x:Name="dgBouquets"
                 FontSize="14"
                 AutoGenerateColumns="False"

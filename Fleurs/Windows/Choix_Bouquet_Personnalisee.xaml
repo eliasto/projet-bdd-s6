@@ -118,28 +118,44 @@
             x:Name="FinaliseCommande_Button"
             Click="FinaliseCommande_Button_Click"
             />
-        <Button
+
+
+
+
+        <Grid Grid.Row="3" Grid.Column="3">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button
             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
             Style="{StaticResource MaterialDesignIconButton}"
             ToolTip="MaterialDesignIconButton"
-            Grid.Column="2"
-            Grid.Row="3"
+            Grid.Column="0"
+            Grid.Row="0"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             x:Name="NoWish_Button"
             Click="NoWish_Button_Click"
             >
-            <materialDesign:PackIcon Kind="SkipNext" />
-        </Button>
-        <TextBlock
+                <materialDesign:PackIcon Kind="SkipNext" />
+            </Button>
+            <TextBlock
             Text="Si vous savez deja ce que vous prenez"
             TextWrapping="WrapWithOverflow"
-            Grid.Column="2"
-            Grid.Row="4"
+            Grid.Column="0"
+            Grid.Row="1"
             FontSize="15"
-            VerticalAlignment="Bottom"
+            VerticalAlignment="Center"
             HorizontalAlignment="Center"
             />
+        </Grid>
+
+
+
+        
+        
 
     </Grid>
 </UserControl>
