@@ -455,6 +455,9 @@ namespace Fleurs.Windows
                 content += "\n" + quantity + "x " + name;
             }
 
+            // Remove first "\n# of content string
+            content = content.Split('\n')[1];
+
             reader.Close();
 
             command.CommandText = $"SELECT order_flowers.quantity, flowers.name FROM order_flowers JOIN flowers ON flowers.id = order_flowers.flower_id WHERE order_flowers.order_id = "+order_id+";";
