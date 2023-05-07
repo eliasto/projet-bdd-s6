@@ -27,12 +27,10 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Login : UserControl
     {
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
         public Login()
         {
-            //connectionString = "SERVER=localhost;PORT=3306;DATABASE=Fleurs;UID=root;PASSWORD=root;";
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();

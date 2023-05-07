@@ -28,12 +28,11 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Register : UserControl
     {
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
 
         public Register()
         {
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();

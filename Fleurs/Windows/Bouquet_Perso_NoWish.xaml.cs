@@ -20,13 +20,14 @@ namespace Fleurs.Windows
     /// <summary>
     /// Logique d'interaction pour Bouquet_Perso_NoWish.xaml
     /// </summary>
+    
     public partial class Bouquet_Perso_NoWish : UserControl
     {
         
         List<Fleur> fleurs = new List<Fleur>();
         List<Produit> produits = new List<Produit>();
 
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
 
         private string emailPage;
@@ -36,7 +37,6 @@ namespace Fleurs.Windows
         {
             emailPage = email;
             typePage = type;
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();

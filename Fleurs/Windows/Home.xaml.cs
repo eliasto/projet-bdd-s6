@@ -37,7 +37,7 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Home : UserControl
     {
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
         MySqlConnection connection1;
         List<Client> clients = new List<Client>();
@@ -45,7 +45,6 @@ namespace Fleurs.Windows
 
         public Home()
         {
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
             connection = new MySqlConnection(connectionString);
             connection1 = new MySqlConnection(connectionString);
             InitializeComponent();

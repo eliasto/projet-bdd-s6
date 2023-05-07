@@ -45,7 +45,7 @@ namespace Fleurs.Windows
 
         List<Shop> shops = new List<Shop>();
 
-        string connectionString;
+        string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
         public Finalisation_Commande(string email, string type, string bouquet, string etat, string dateDeLivraison, decimal prix, int bouquet_id)
         {
@@ -57,8 +57,6 @@ namespace Fleurs.Windows
             bouquet_idPage = bouquet_id;
             prixPage = Convert.ToDouble(prix);
             InitializeComponent();
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
-            //connectionString = "SERVER=localhost;PORT=3306;DATABASE=Fleurs;UID=root;PASSWORD=root;";
             connection = new MySqlConnection(connectionString);
             connection.Open();
 
@@ -89,8 +87,6 @@ namespace Fleurs.Windows
             budgetPage = budget;
             wishPage = wish;
             InitializeComponent();
-            connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=marcgroszizi1789;";
-            //connectionString = "SERVER=localhost;PORT=3306;DATABASE=Fleurs;UID=root;PASSWORD=root;";
             connection = new MySqlConnection(connectionString);
             connection.Open();
 
