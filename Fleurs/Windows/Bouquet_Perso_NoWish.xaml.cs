@@ -1,5 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,6 +23,7 @@ namespace Fleurs.Windows
         private string emailPage;
         private string typePage;
 
+        float prix;
         public Bouquet_Perso_NoWish(string email, string type)
         {
             emailPage = email;
@@ -60,7 +63,7 @@ namespace Fleurs.Windows
 
             connection.Close();
         }
-        private class Fleur
+        public class Fleur
         {
             public int Id { get; set; }
             public string Name { get; set; }
@@ -82,7 +85,7 @@ namespace Fleurs.Windows
                 this.Count = 0;
             }
         }
-        private class Produit
+        public class Produit
         {
             public int Id { get; set; }
             public string Name { get; set; }
@@ -140,7 +143,7 @@ namespace Fleurs.Windows
         }
         public void Get_price()
         {
-            float prix = 0;
+            prix = 0;
             for (int i = 0; i < fleurs.Count; i++)
             {
                 prix += (float)(fleurs[i].Count * fleurs[i].Price);
@@ -185,6 +188,40 @@ namespace Fleurs.Windows
 
         private void FinaliseCommande_Button_Click(object sender, RoutedEventArgs e)
         {
+            DateTime? selectedDate = DateDeLivraison_DP.SelectedDate;
+            DateTime? date_du_jour = DateTime.Now;
+            TimeSpan? duree;
+            string dureeEnJ_str;
+            int dureeEnJ_int;
+            bool futur = !(selectedDate < date_du_jour);
+            string dateDeLivraison;
+
+            if (selectedDate.HasValue && prix > 0)
+            {
+                dateDeLivraison = selectedDate.Value.ToString("yyyy-MM-dd");
+                duree = selectedDate - date_du_jour;
+                dureeEnJ_str = duree.Value.ToString("dd");
+                dureeEnJ_int = Convert.ToInt32(dureeEnJ_str) + 1;
+                futur = !(selectedDate < date_du_jour);
+                if (futur)
+                {
+                    //string email, string type, string etat, string dateDeLivraison, decimal prix,
+                    //List<Bouquet_Perso_NoWish.Fleur> fleurs, List<Bouquet_Perso_NoWish.Produit> produits
+
+
+                    Finalisation_Commande fin_de_commande = new Finalisation_Commande(emailPage, typePage, "CPAV", dateDeLivraison, prix, fleurs, produits);
+                    this.Content = fin_de_commande;
+                }
+                else { MessageBox.Show("Veuillez choisir une date de livraison dans le futur", "Date de livraison incorrect", MessageBoxButton.OK, MessageBoxImage.Warning); }
+            }
+            else if (!selectedDate.HasValue)
+            {
+                MessageBox.Show("Veuillez choisir une date de livraison", "Pas de date de livraison", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else //if (prix == 0)
+            {
+                MessageBox.Show("Veuillez commander des fleurs ou des accesoires", "Commande vide", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
         }
     }

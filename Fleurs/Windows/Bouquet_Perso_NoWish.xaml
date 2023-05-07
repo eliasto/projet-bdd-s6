@@ -28,9 +28,16 @@
             Text="Personnalisez votre bouquet"     
             TextWrapping="WrapWithOverflow"
             />
-        <TextBlock
+
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock
             Grid.Column="0"
-            Grid.Row="1"            
+            Grid.Row="0"            
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="20"
@@ -38,8 +45,21 @@
             Text="Prix : "     
             TextWrapping="WrapWithOverflow"
             />
-        
-        
+            <DatePicker
+            x:Name="DateDeLivraison_DP"
+            Width="100"
+            materialDesign:CalendarAssist.IsHeaderVisible="False"
+            materialDesign:HintAssist.Hint="Date de livraison"
+            Grid.Column="0"
+            Grid.Row="1">
+                <DatePicker.SelectedDate>
+                    <Binding
+                Path="FutureValidatingDate"
+                    UpdateSourceTrigger="PropertyChanged">
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+        </Grid>
         <DataGrid
                 Grid.Row="1"
                 Grid.Column="1"
@@ -80,7 +100,7 @@
                               x:Name="AddFlower_Button"   Click="Add_Button_Click" 
                                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                                 ToolTip="MaterialDesignFloatingActionMiniButton">
-                                    <materialDesign:PackIcon 
+                                <materialDesign:PackIcon 
                                          Kind="Plus" />
                             </Button>
                         </DataTemplate>
@@ -105,10 +125,7 @@
                         Header="Count" 
                         IsReadOnly="True"/>
             </DataGrid.Columns>
-
-
         </DataGrid>
-        
         <DataGrid
                 Grid.Row="2"
                 Grid.Column="1"
@@ -171,8 +188,6 @@
                         IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-
-
         <Grid Grid.Row="3" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -199,8 +214,5 @@
             Click="FinaliseCommande_Button_Click"
             />
         </Grid>
-
-
-        
     </Grid>
 </UserControl>

@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Google.Protobuf.WellKnownTypes;
+using MaterialDesignThemes.Wpf;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -32,6 +34,9 @@ namespace Fleurs.Windows
 
         List<Shop> shops = new List<Shop>();
 
+        List<Bouquet_Perso_NoWish.Fleur> fleursPage = new List<Bouquet_Perso_NoWish.Fleur>();
+        List<Bouquet_Perso_NoWish.Produit> produitsPage = new List<Bouquet_Perso_NoWish.Produit>();
+
         string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
         public Finalisation_Commande(string email, string type, string bouquet, string etat, string dateDeLivraison, decimal prix, int bouquet_id)
@@ -48,22 +53,7 @@ namespace Fleurs.Windows
             connection.Open();
 
             shops = new List<Shop>();
-            MySqlCommand command = connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM shops;";
-            MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                Shop shop = new Shop((int)reader["id"], (string)reader["city"]);
-                shops.Add(shop);
-            }
-            reader.Close();
-            List<string> Nom_shop = new List<string>();
-            for (int i = 0; i < shops.Count; i++)
-            {
-                Nom_shop.Add(shops[i].City);
-            }
-            ChoixM_ComboBox.ItemsSource = Nom_shop;
+            InitializeShops();
         }
         public Finalisation_Commande(string email, string type, string wish, string etat, string dateDeLivraison, double budget)
         {
@@ -76,8 +66,28 @@ namespace Fleurs.Windows
             InitializeComponent();
             connection = new MySqlConnection(connectionString);
             connection.Open();
-
             shops = new List<Shop>();
+            InitializeShops();
+        }
+        public Finalisation_Commande(string email, string type, string etat, string dateDeLivraison, float prix, List<Bouquet_Perso_NoWish.Fleur> fleurs, List<Bouquet_Perso_NoWish.Produit> produits)
+        {
+            emailPage = email;
+            typePage = type;
+            etatPage = etat;
+            dateDeLivraisonPage = dateDeLivraison;
+            prixPage = prix;
+            fleursPage = fleurs;
+            produitsPage = produits;
+            fleursPage = fleurs;
+            produitsPage = produits;
+            connection = new MySqlConnection(connectionString);
+            connection.Open();
+            InitializeComponent();
+            shops = new List<Shop>();
+            InitializeShops();
+        }
+        private void InitializeShops()
+        {
             MySqlCommand command = connection.CreateCommand();
             command.CommandText = $"SELECT * FROM shops;";
             MySqlDataReader reader = command.ExecuteReader();
@@ -134,8 +144,6 @@ namespace Fleurs.Windows
             {
                 Payement();
             }            
-            //juste ça 
-            // et relire et commenter
         }
         public void Payement()
         {
@@ -161,7 +169,7 @@ namespace Fleurs.Windows
                     reduction = reader.GetString(0);//  GetString(0);
                 }
                 reader.Close();
-                if (typePage=="CS")
+                if (typePage=="CS" || wishPage==null)
                 {
                     prix = prixPage;
                 }
@@ -227,6 +235,8 @@ namespace Fleurs.Windows
             int address_exist = -1;
             int id_address = -1;
             int id_shop = -1;
+            prix = Math.Round((double)prix, 2);
+            budgetPage = Math.Round((double)budgetPage, 2);
             MySqlCommand command = connection.CreateCommand();
             MySqlDataReader reader;
             command.CommandText = $"UPDATE bouquets " +
@@ -278,7 +288,7 @@ namespace Fleurs.Windows
                 reader.Close();
                 command.CommandText = $"SELECT id FROM orders WHERE " +
                     $"client_id={id} AND address={id_address} AND delivery='{dateDeLivraisonPage}' AND max_price={prix.ToString().Replace(",", ".")} AND " +
-                    $"message='{Message}' AND status='{etatPage}' AND type='{typePage}'";
+                    $"message='{Message}' AND status='{etatPage}' AND type='{typePage}' AND shop='{id_shop}';";
                 reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -290,7 +300,7 @@ namespace Fleurs.Windows
                 reader.Close();
 
             }
-            else
+            else if(wishPage!=null)
             {
                 command.CommandText = $"INSERT INTO orders " +
                     $"(client_id, address, delivery, max_price, message, status, type, wishes, shop) " +
@@ -298,8 +308,60 @@ namespace Fleurs.Windows
                 reader = command.ExecuteReader();
                 reader.Close();
             }
+            else
+            {
+                command.CommandText = $"INSERT INTO orders " +
+                    $"(client_id, address, delivery, max_price, message, status, type, shop) " +
+                    $"VALUES({id},{id_address},'{dateDeLivraisonPage}',{prix.ToString().Replace(",", ".")},'{Message}','{etatPage}','{typePage}', {id_shop});";//voir pour les address
+                reader = command.ExecuteReader();
+                reader.Close();
+
+                command.CommandText = $"SELECT id FROM orders WHERE " +
+                    $"client_id={id} AND address={id_address} AND delivery='{dateDeLivraisonPage}' AND max_price={prix.ToString().Replace(",", ".")} AND " +
+                    $"message='{Message}' AND status='{etatPage}' AND type='{typePage}' AND shop='{id_shop}';";
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    id_order = reader.GetInt32(0);
+                }
+                reader.Close();
+                for(int i = 0; i<fleursPage.Count ; i++)
+                {
+                    if (fleursPage[i].Count > 0)
+                    {
+                        command.CommandText = $"INSERT INTO order_flowers " +
+                            $"(order_id, flower_id, quantity) " +
+                            $"VALUES({id_order}, {fleursPage[i].Id}, {fleursPage[i].Count})";
+                        reader = command.ExecuteReader();
+                        reader.Close();
+                                         
+                        command.CommandText = $"UPDATE flowers " +
+                            $"SET stock = stock-{fleursPage[i].Count} " +
+                            $"WHERE id={fleursPage[i].Id}; ";
+                        reader = command.ExecuteReader();
+                        reader.Close();
+                    }
+                }
+                for (int i = 0; i < produitsPage.Count; i++)
+                {
+                    if (produitsPage[i].Count > 0)
+                    {
+                        command.CommandText = $"INSERT INTO order_products " +
+                            $"(order_id, product_id, quantity) " +
+                            $"VALUES({id_order}, {produitsPage[i].Id}, {produitsPage[i].Count})";
+                        reader = command.ExecuteReader();
+                        reader.Close();
+
+                        command.CommandText = $"UPDATE products " +
+                            $"SET stock = stock-{produitsPage[i].Count} " +
+                            $"WHERE id={produitsPage[i].Id}; ";
+                        reader = command.ExecuteReader();
+                        reader.Close();
+                    }
+                }
+            }
         }
-        public int finfIdClient()//faire la même avec tout les id
+        public int finfIdClient()
         {
             int id=-1;
             MySqlCommand command = connection.CreateCommand();
@@ -322,8 +384,6 @@ namespace Fleurs.Windows
                 this.Id = id;
                 this.City = city;
             }
-
-
         }
     }
 }
