@@ -68,6 +68,7 @@ namespace Fleurs.Windows
             public int StartMonth { get; set; }
             public int EndMonth { get; set; }
             public int Stock { get; set; }
+            public int Count { get; set; }
 
 
             public Fleur(int id, string name, decimal price, int startMonth, int endMonth, int stock)
@@ -78,6 +79,7 @@ namespace Fleurs.Windows
                 this.StartMonth = startMonth;
                 this.EndMonth = endMonth;
                 this.Stock = stock;
+                this.Count = 0;
             }
         }
         private class Produit
@@ -87,6 +89,8 @@ namespace Fleurs.Windows
             public string Description { get; set; }
             public decimal Price { get; set; }
             public int Stock { get; set; }
+            public int Count { get; set; }
+
 
 
             public Produit(int id, string name, string description, decimal price, int stock)
@@ -96,6 +100,7 @@ namespace Fleurs.Windows
                 this.Description = description;
                 this.Price = price;
                 this.Stock = stock;
+                this.Count = 0;
             }
         }
 
@@ -103,6 +108,84 @@ namespace Fleurs.Windows
         {
             Choix_Bouquet_Personnalisee Retour = new Choix_Bouquet_Personnalisee(emailPage, typePage);
             this.Content = Retour;
+        }
+
+        private void Add_Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+            Fleur fleur_add = (sender as FrameworkElement).DataContext as Fleur;
+            for (int i=0; i<fleurs.Count ; i++)
+            {
+                if (fleurs[i].Name == fleur_add.Name && fleurs[i].Stock>0)
+                {
+                    fleurs[i].Count++;
+                    fleurs[i].Stock--;
+                }
+            }
+            Get_price();
+        }
+
+        private void Minus_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Fleur fleur_rmv = (sender as FrameworkElement).DataContext as Fleur;
+            for (int i = 0; i < fleurs.Count; i++)
+            {
+                if (fleurs[i].Name == fleur_rmv.Name && fleurs[i].Count>0)
+                {
+                    fleurs[i].Count--;
+                    fleurs[i].Stock++;
+                }
+            }
+            Get_price();
+        }
+        public void Get_price()
+        {
+            float prix = 0;
+            for (int i = 0; i < fleurs.Count; i++)
+            {
+                prix += (float)(fleurs[i].Count * fleurs[i].Price);
+            }
+            for (int i = 0; i < produits.Count; i++)
+            {
+                prix += (float)(produits[i].Count * produits[i].Price);
+            }
+
+            dgFleurs.Items.Refresh();
+            dgProduits.Items.Refresh();
+            Prix_TextBlock.Text = "Prix : " + prix + "€";
+        }
+
+        private void AddProduct_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Produit product_add = (sender as FrameworkElement).DataContext as Produit;
+            for (int i = 0; i < produits.Count; i++)
+            {
+                if (produits[i].Name == product_add.Name && produits[i].Stock > 0)
+                {
+                    produits[i].Count++;
+                    produits[i].Stock--;
+                }
+            }
+            Get_price();
+        }
+
+        private void RemoveProduct_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Produit product_rmv = (sender as FrameworkElement).DataContext as Produit;
+            for (int i = 0; i < produits.Count; i++)
+            {
+                if (produits[i].Name == product_rmv.Name && produits[i].Count > 0)
+                {
+                    produits[i].Count--;
+                    produits[i].Stock++;
+                }
+            }
+            Get_price();
+        }
+
+        private void FinaliseCommande_Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
