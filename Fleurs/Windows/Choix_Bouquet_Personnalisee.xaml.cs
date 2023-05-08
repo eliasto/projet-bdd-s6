@@ -12,6 +12,7 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Choix_Bouquet_Personnalisee : UserControl
     {
+        //regex function so the input can only contain number from 0 to 9 and a dot
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9.]+");
@@ -31,7 +32,7 @@ namespace Fleurs.Windows
             Choix_Perso_standard choix_du_type_de_bouquet = new Choix_Perso_standard(emailPage);
             this.Content = choix_du_type_de_bouquet;
         }
-
+        //Check if every field has the right type of value and is not empty, then passes to the next page with the right values
         private void FinaliseCommande_Button_Click(object sender, RoutedEventArgs e)
         {
             DateTime? selectedDate = DateDeLivraison_DP.SelectedDate;
@@ -76,7 +77,7 @@ namespace Fleurs.Windows
             }
 
         }
-
+        // If a client already knows what they want they can pass directly to a page where they choose from the flower and products db
         private void NoWish_Button_Click(object sender, RoutedEventArgs e)
         {
             Bouquet_Perso_NoWish Skip = new Bouquet_Perso_NoWish(emailPage, typePage);

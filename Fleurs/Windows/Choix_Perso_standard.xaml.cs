@@ -37,9 +37,6 @@ namespace Fleurs.Windows
         {
             Choix_Bouquet_Standard choix_Bouquet_Standard = new Choix_Bouquet_Standard(emailPage, "CS");
             this.Content = choix_Bouquet_Standard;
-            //Test test = new Test();
-            //this.Content = test;
-
         }
     }
 }

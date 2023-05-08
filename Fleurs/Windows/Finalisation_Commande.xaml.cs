@@ -15,6 +15,7 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Finalisation_Commande : UserControl
     {
+        //regex function => the inputs can only be nb from 0 to 9
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
@@ -39,6 +40,7 @@ namespace Fleurs.Windows
 
         string connectionString = new Utils.Utils().connectionString;
         MySqlConnection connection;
+        //Initialisation function for bouquet standard
         public Finalisation_Commande(string email, string type, string bouquet, string etat, string dateDeLivraison, decimal prix, int bouquet_id)
         {
             emailPage = email;
@@ -55,6 +57,7 @@ namespace Fleurs.Windows
             shops = new List<Shop>();
             InitializeShops();
         }
+        // Initialisation fucntion for bouquet personnalisee
         public Finalisation_Commande(string email, string type, string wish, string etat, string dateDeLivraison, double budget)
         {
             emailPage = email;
@@ -69,6 +72,7 @@ namespace Fleurs.Windows
             shops = new List<Shop>();
             InitializeShops();
         }
+        // Initialise function for bouquet personnalisee when the flowers end products are choosen directly
         public Finalisation_Commande(string email, string type, string etat, string dateDeLivraison, float prix, List<Bouquet_Perso_NoWish.Fleur> fleurs, List<Bouquet_Perso_NoWish.Produit> produits)
         {
             emailPage = email;
@@ -86,6 +90,7 @@ namespace Fleurs.Windows
             shops = new List<Shop>();
             InitializeShops();
         }
+        //Get the shops from db and bind them to a ComboBox
         private void InitializeShops()
         {
             MySqlCommand command = connection.CreateCommand();
@@ -103,7 +108,7 @@ namespace Fleurs.Windows
             {
                 Nom_shop.Add(shops[i].City);
             }
-            ChoixM_ComboBox.ItemsSource = Nom_shop;
+            ChoixM_ComboBox.ItemsSource = Nom_shop;//Binding to ComboBox
         }
         private void Retour_Button_Click(object sender, RoutedEventArgs e)
         {
