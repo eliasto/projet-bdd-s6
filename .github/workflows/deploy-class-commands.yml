@@ -2,9 +2,9 @@ name: "Deploy Class Commands"
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - "fleurs/v*"
+
 
 env:
   PROJECT_PATH: Fleurs/Fleurs.csproj
