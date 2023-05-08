@@ -22,43 +22,33 @@ namespace Fleurs.Windows
     /// </summary>
     public partial class Home : UserControl
     {
-        string connectionString = new Utils.Utils().connectionString;
-        MySqlConnection connection;
-        MySqlConnection connection1;
+        MySqlConnection connection = new MySqlConnection(new Utils.Utils().connectionString);
         List<Client> clients = new List<Client>();
         List<Orders> orders = new List<Orders>();
+        List<Products> products = new List<Products>();
+        MySqlCommand command;
+        MySqlDataReader reader;
 
         public Home()
         {
-            connection = new MySqlConnection(connectionString);
-            connection1 = new MySqlConnection(connectionString);
             InitializeComponent();
             connection.Open();
 
-
-            MySqlCommand command = connection.CreateCommand();
+            command = connection.CreateCommand();
             command.CommandText = $"SELECT c.id, c.name, c.surname, c.email, c.phone, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients c LEFT JOIN orders o ON c.id = o.client_id GROUP BY c.id, c.name, c.surname, c.email, c.phone";
-            MySqlDataReader reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
 
             while (reader.Read())
             {
                 Client client = new Client((int)reader["id"], (string)reader["name"], (string)reader["surname"], (string)reader["phone"], (string)reader["email"], (string)reader["fidelity_level"]);
                 clients.Add(client);
             }
+            reader.Close();
 
             dgClients.ItemsSource = clients;
-            connection.Close();
-            connection.Open();
 
-            MySqlCommand command1 = connection.CreateCommand();
-            command1.CommandText = $"SELECT s.id, s.city, COALESCE(SUM(p.price * op.quantity), 0) AS ProductsRevenue, COALESCE(SUM(b.price * ob.quantity), 0) AS BouquetsRevenue, COALESCE(SUM(f.price * ofl.quantity), 0) AS FlowersRevenue, COALESCE(SUM(p.price * op.quantity), 0) + COALESCE(SUM(b.price * ob.quantity), 0) + COALESCE(SUM(f.price * ofl.quantity), 0) AS TotalRevenue FROM orders o LEFT JOIN order_products op ON o.id = op.order_id LEFT JOIN products p ON op.product_id = p.id LEFT JOIN order_bouquets ob ON o.id = ob.order_id LEFT JOIN bouquets b ON ob.bouquet_id = b.id LEFT JOIN order_flowers ofl ON o.id = ofl.order_id LEFT JOIN flowers f ON ofl.flower_id = f.id JOIN shops s ON s.id = o.shop GROUP BY s.id, s.city ORDER BY TotalRevenue DESC;";
+            generateBestShop();
 
-            MySqlDataReader reader1 = command1.ExecuteReader();
-            generateBestShop(reader1);
-
-            reader.Close();
-            connection1.Open();
-            command = connection1.CreateCommand();
             //Bouquet qui a le plus de succès
             command.CommandText = $"SELECT bouquets.name, SUM(order_bouquets.quantity) AS total_sales FROM bouquets JOIN order_bouquets ON bouquets.id = order_bouquets.bouquet_id JOIN orders ON order_bouquets.order_id = orders.id WHERE orders.type = 'CS' GROUP BY bouquets.id ORDER BY total_sales DESC LIMIT 1;";
             reader = command.ExecuteReader();
@@ -72,7 +62,7 @@ namespace Fleurs.Windows
             }
 
             reader.Close();
-            command = connection1.CreateCommand();
+
             //Calcul du prix moyen d'un bouquet
             command.CommandText = $"SELECT AVG(bouquets.price) FROM orders JOIN order_bouquets ON orders.id = order_bouquets.order_id JOIN bouquets ON order_bouquets.bouquet_id = bouquets.id;";
             reader = command.ExecuteReader();
@@ -80,12 +70,12 @@ namespace Fleurs.Windows
             {
                 decimal average = reader["AVG(bouquets.price)"] == DBNull.Value ? 0 : (decimal)reader["AVG(bouquets.price)"];
                 this.average_price_bouquet_title.Text = "Prix moyen d'un bouquet";
-                this.average_price_bouquet_text.Text = "Le prix moyen d'un bouquet d'un panier type d'un client est de "+ average+" €.";
+                this.average_price_bouquet_text.Text = "Le prix moyen d'un bouquet d'un panier type d'un client est de " + average + " €.";
                 this.average_price_bouquet_image.Source = new BitmapImage(new Uri("https://i.pinimg.com/736x/e7/99/b9/e799b9b79a896eeec05b1fff13d86f91.jpg"));
             }
 
             reader.Close();
-            command = connection1.CreateCommand();
+
             //Fleur exotique la moins vendue
             command.CommandText = $"SELECT flowers.name, SUM(order_flowers.quantity) as total_sale FROM orders JOIN order_flowers ON order_flowers.order_id = orders.id JOIN flowers on order_flowers.flower_id = flowers.id GROUP BY flowers.name ORDER BY total_sale ASC LiMIT 1;";
             reader = command.ExecuteReader();
@@ -94,14 +84,14 @@ namespace Fleurs.Windows
                 string name = (string)reader["name"];
                 decimal total_sale = (decimal)reader["total_sale"];
                 this.worst_flower_title.Text = name;
-                this.worst_flower_text.Text = "La fleur avec le moins de vente est la "+name+" avec "+total_sale+" ventes.";
+                this.worst_flower_text.Text = "La fleur avec le moins de vente est la " + name + " avec " + total_sale + " ventes.";
                 this.worst_flower_image.Source = new BitmapImage(new Uri("https://jardinage.lemonde.fr/images/dossiers/2018-01/fleurs-fanees-171021.jpg"));
             }
 
             string text = "";
 
             reader.Close();
-            command = connection1.CreateCommand();
+
             //Meilleur client dans l'année
             command.CommandText = $"SELECT clients.id, clients.name, SUM(bouquets.price * order_bouquets.quantity) AS total_bouquets FROM orders JOIN clients ON orders.client_id = clients.id JOIN order_bouquets ON orders.id = order_bouquets.order_id JOIN bouquets ON order_bouquets.bouquet_id = bouquets.id WHERE YEAR(orders.creation_date) = YEAR(CURRENT_DATE()) GROUP BY clients.id, clients.name ORDER BY total_bouquets DESC LIMIT 1;";
             reader = command.ExecuteReader();
@@ -109,11 +99,11 @@ namespace Fleurs.Windows
             {
                 string name = (string)reader["name"];
                 decimal total_bouquets = (decimal)reader["total_bouquets"];
-                text += "Le meilleur client dans l'année est "+name+" où il a acheté pour "+total_bouquets+"€ de bouquets.";
+                text += "Le meilleur client dans l'année est " + name + " où il a acheté pour " + total_bouquets + "€ de bouquets.";
             }
 
             reader.Close();
-            command = connection1.CreateCommand();
+
             //Meilleur client dans le mois
             command.CommandText = $"SELECT clients.id, clients.name, SUM(bouquets.price * order_bouquets.quantity) AS total_bouquets FROM orders JOIN clients ON orders.client_id = clients.id JOIN order_bouquets ON orders.id = order_bouquets.order_id JOIN bouquets ON order_bouquets.bouquet_id = bouquets.id WHERE MONTH(orders.creation_date) = MONTH(CURRENT_DATE()) GROUP BY clients.id, clients.name ORDER BY total_bouquets DESC LIMIT 1;";
             reader = command.ExecuteReader();
@@ -128,14 +118,13 @@ namespace Fleurs.Windows
             this.best_client_text.Text = text;
             this.best_client_image.Source = new BitmapImage(new Uri("https://blog.smile.io/content/images/2018/Do%20You%20Know%20Who%20Your%20Best%20Customers%20Are/Best-Customers-Feature.png"));
             reader.Close();
-            List<Products> products = new List<Products>();
 
-            command = connection1.CreateCommand();
             command.CommandText = $"SELECT * FROM products;";
             reader = command.ExecuteReader();
 
             while (reader.Read())
             {
+                int id = (int)reader["id"];
                 string name = (string)reader["name"];
                 string type = "Accessoires";
                 string description = (string)reader["description"];
@@ -145,16 +134,16 @@ namespace Fleurs.Windows
                 int end_month = 12;
                 string category = "Aucune catégorie";
                 bool alert = (bool)reader["alert"];
-                products.Add(new Products(type, name,description,stock,price, start_month, end_month, category, alert));
+                products.Add(new Products(id, type, name, description, stock, price, start_month, end_month, category, alert));
             }
             reader.Close();
 
-            command = connection1.CreateCommand();
             command.CommandText = $"SELECT * FROM flowers;";
             reader = command.ExecuteReader();
 
             while (reader.Read())
             {
+                int id = (int)reader["id"];
                 string name = (string)reader["name"];
                 string type = "Fleurs";
                 string description = "Aucune description";
@@ -164,17 +153,17 @@ namespace Fleurs.Windows
                 int end_month = (int)reader["end_month"];
                 string category = "Aucune catégorie";
                 bool alert = (bool)reader["alert"];
-                products.Add(new Products(type, name, description, stock, price, start_month, end_month, category, alert));
+                products.Add(new Products(id, type, name, description, stock, price, start_month, end_month, category, alert));
             }
             reader.Close();
 
 
-            command = connection1.CreateCommand();
-            command.CommandText = $"SELECT bouquets.name, bouquets.description, bouquets.price, bouquets.stock, bouquets.alert, category.name AS category FROM Fleurs.bouquets JOIN category ON bouquets.category = category.id;";
+            command.CommandText = $"SELECT bouquets.id, bouquets.name, bouquets.description, bouquets.price, bouquets.stock, bouquets.alert, category.name AS category FROM Fleurs.bouquets JOIN category ON bouquets.category = category.id;";
             reader = command.ExecuteReader();
 
             while (reader.Read())
             {
+                int id = (int)reader["id"];
                 string name = (string)reader["name"];
                 string type = "Bouquets";
                 string description = (string)reader["description"];
@@ -184,14 +173,13 @@ namespace Fleurs.Windows
                 int end_month = 12;
                 string category = (string)reader["category"];
                 bool alert = (bool)reader["alert"];
-                products.Add(new Products(type, name, description, stock, price, start_month, end_month, category, alert));
+                products.Add(new Products(id, type, name, description, stock, price, start_month, end_month, category, alert));
             }
             reader.Close();
 
             Trace.WriteLine(products.Count());
             products_data.ItemsSource = products;
 
-            command = connection1.CreateCommand();
             command.CommandText = $"SELECT orders.id,orders.client_id,orders.type,orders.wishes,orders.max_price,orders.address,orders.message,orders.delivery,orders.creation_date,orders.status,shops.city as shop FROM orders JOIN shops ON orders.shop = shops.id;";
             reader = command.ExecuteReader();
 
@@ -225,9 +213,10 @@ namespace Fleurs.Windows
                 string message = (string)reader["message"];
                 DateTime delivery = (DateTime)reader["delivery"];
                 DateTime creation_time = (DateTime)reader["creation_date"];
-                string status = (string)reader["status"];
                 string shop = (string)reader["shop"];
                 string content = ContentOfTheOrder(id);
+
+                OrderStatus status = (OrderStatus)Enum.Parse(typeof(OrderStatus), (string)reader["status"]);
 
                 orders.Add(new Orders(id, client_id, type, wishes, max_price, address, message, delivery, creation_time, status, shop, content));
 
@@ -236,42 +225,51 @@ namespace Fleurs.Windows
             orders_data.ItemsSource = orders;
 
             reader.Close();
-            foreach(Client client in clients)
+            foreach (Client client in clients)
             {
                 combobox_clients_orders.Items.Add("#" + client.id + " " + client.name + " " + client.surname);
             }
         }
 
-        public async void generateBestShop(MySqlDataReader reader1)
+        public async void generateBestShop()
         {
             // Exécutez la tâche de manière asynchrone en utilisant Task.Run
+            MySqlConnection connection_shop = new MySqlConnection(new Utils.Utils().connectionString);
+            connection_shop.Open();
+            MySqlCommand command_shop = connection_shop.CreateCommand();
+            command_shop.CommandText = $"SELECT s.id, s.city, COALESCE(SUM(p.price * op.quantity), 0) AS ProductsRevenue, COALESCE(SUM(b.price * ob.quantity), 0) AS BouquetsRevenue, COALESCE(SUM(f.price * ofl.quantity), 0) AS FlowersRevenue, COALESCE(SUM(p.price * op.quantity), 0) + COALESCE(SUM(b.price * ob.quantity), 0) + COALESCE(SUM(f.price * ofl.quantity), 0) AS TotalRevenue FROM orders o LEFT JOIN order_products op ON o.id = op.order_id LEFT JOIN products p ON op.product_id = p.id LEFT JOIN order_bouquets ob ON o.id = ob.order_id LEFT JOIN bouquets b ON ob.bouquet_id = b.id LEFT JOIN order_flowers ofl ON o.id = ofl.order_id LEFT JOIN flowers f ON ofl.flower_id = f.id JOIN shops s ON s.id = o.shop GROUP BY s.id, s.city ORDER BY TotalRevenue DESC;";
+            MySqlDataReader reader_shop = command_shop.ExecuteReader();
+
 
             List<Shop> shops = new List<Shop>();
 
-            while (reader1.Read())
+            while (reader_shop.Read())
             {
-                string photoUrl = await Task.Run(() => GetCityPhoto((string)reader1["city"]));
-                Shop shop = new Shop((int)reader1["id"], (string)reader1["city"], (decimal)reader1["TotalRevenue"], (decimal)reader1["FlowersRevenue"], (decimal)reader1["ProductsRevenue"], (decimal)reader1["BouquetsRevenue"], photoUrl);
+                string photoUrl = await Task.Run(() => GetCityPhoto((string)reader_shop["city"]));
+                Shop shop = new Shop((int)reader_shop["id"], (string)reader_shop["city"], (decimal)reader_shop["TotalRevenue"], (decimal)reader_shop["FlowersRevenue"], (decimal)reader_shop["ProductsRevenue"], (decimal)reader_shop["BouquetsRevenue"], photoUrl);
                 shops.Add(shop);
                 Trace.WriteLine(shops[0].image);
                 this.best_shop_image.Source = new BitmapImage(new Uri(shops[0].image));
-                this.best_shop_text.Text = shops[0].city+"\nTotal accessories sold: "+shops[0].productsRevenue+"€\nTotal flowers sold: "+shops[0].flowersRevenue+"€\nTotal bouquets sold: "+shops[0].bouquetsRevenue+"€\nTurnover: "+shops[0].turnover+"€";
+                this.best_shop_text.Text = shops[0].city + "\nTotal accessories sold: " + shops[0].productsRevenue + "€\nTotal flowers sold: " + shops[0].flowersRevenue + "€\nTotal bouquets sold: " + shops[0].bouquetsRevenue + "€\nTurnover: " + shops[0].turnover + "€";
             }
+
+            reader_shop.Close();
+            connection_shop.Close();
         }
 
         private void Show_History(object sender, RoutedEventArgs e)
         {
             int id = (int)((Button)sender).Tag;
 
-            foreach(Client client in clients)
+            foreach (Client client in clients)
             {
-                if(client.id == id)
+                if (client.id == id)
                 {
                     combobox_clients_orders.SelectedItem = "#" + client.id + " " + client.name + " " + client.surname;
                     List<Orders> newOrders = new List<Orders>();
-                    foreach(Orders order in orders)
+                    foreach (Orders order in orders)
                     {
-                        if(order.client_id == id)
+                        if (order.client_id == id)
                         {
                             newOrders.Add(order);
                         }
@@ -287,7 +285,7 @@ namespace Fleurs.Windows
         {
             string comboboxValue = combobox_clients_orders.SelectedItem.ToString();
             Trace.WriteLine(comboboxValue);
-            if(comboboxValue != "System.Windows.Controls.ComboBoxItem : Toutes les commandes")
+            if (comboboxValue != "System.Windows.Controls.ComboBoxItem : Toutes les commandes")
             {
                 string idClientSplitted = comboboxValue.Split('#')[1].Split(' ')[0];
                 Trace.WriteLine(idClientSplitted);
@@ -307,14 +305,13 @@ namespace Fleurs.Windows
                 orders_data.ItemsSource = orders;
             }
 
-            
-               
-        }
 
+
+        }
 
         private void Export_JSON(object sender, RoutedEventArgs e)
         {
-            MySqlCommand command = this.connection1.CreateCommand();
+            MySqlCommand command = this.connection.CreateCommand();
             command.CommandText = $"SELECT c.id, c.name, c.surname, c.phone, c.email, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients AS c LEFT JOIN orders AS o ON c.id = o.client_id WHERE o.creation_date IS NULL OR o.creation_date < DATE_SUB(NOW(), INTERVAL 6 MONTH) GROUP BY c.id, c.name,c.surname,c.phone,c.email;";
             MySqlDataReader reader = command.ExecuteReader();
             List<Client> clients = new List<Client>();
@@ -396,7 +393,7 @@ namespace Fleurs.Windows
 
         private void Export_XML(object sender, RoutedEventArgs e)
         {
-            MySqlCommand command = this.connection1.CreateCommand();
+            MySqlCommand command = this.connection.CreateCommand();
             command.CommandText = $"SELECT c.id, c.name, c.surname, c.phone, c.email, COUNT(o.id) AS num_orders, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients AS c JOIN orders AS o ON c.id = o.client_id WHERE o.creation_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY c.id, c.name, c.surname, c.phone, c.email HAVING COUNT(o.id) > 1;";
             MySqlDataReader reader = command.ExecuteReader();
             List<Client_XML> clients = new List<Client_XML>();
@@ -408,10 +405,10 @@ namespace Fleurs.Windows
                 string phone = (string)reader["phone"];
                 string email = (string)reader["email"];
                 string fidelity_level = (string)reader["fidelity_level"];
-                Client_XML client = new Client_XML { email = email, id = id, name = name, surname = surname, phone = phone, fidelity_level = fidelity_level};
+                Client_XML client = new Client_XML { email = email, id = id, name = name, surname = surname, phone = phone, fidelity_level = fidelity_level };
                 clients.Add(client);
             }
-            
+
             reader.Close();
             XmlSerializer xs = new XmlSerializer(typeof(List<Client_XML>));
             // Créez une instance de SaveFileDialog
@@ -438,59 +435,129 @@ namespace Fleurs.Windows
 
         }
 
-        private string ContentOfTheOrder (int order_id)
+        private string ContentOfTheOrder(int order_id)
         {
             string content = "";
 
-            MySqlConnection conne = new MySqlConnection(connectionString);
-            conne.Open();
-            MySqlCommand command = conne.CreateCommand();
-            command.CommandText = $"SELECT order_products.quantity, products.name FROM order_products JOIN products ON products.id = order_products.product_id WHERE order_products.order_id = " + order_id + ";";
-            MySqlDataReader reader = command.ExecuteReader();
+            MySqlConnection connection_order = new MySqlConnection(new Utils.Utils().connectionString);
+            connection_order.Open();
+            MySqlCommand command_order = connection_order.CreateCommand();
+            command_order.CommandText = $"SELECT order_products.quantity, products.name FROM order_products JOIN products ON products.id = order_products.product_id WHERE order_products.order_id = " + order_id + ";";
+            MySqlDataReader reader_order = command_order.ExecuteReader();
 
-            while (reader.Read())
+            while (reader_order.Read())
             {
-                string name = (string)reader["name"];
-                int quantity = (int)reader["quantity"];
+                string name = (string)reader_order["name"];
+                int quantity = (int)reader_order["quantity"];
                 content += "\n" + quantity + "x " + name;
             }
 
-            // Remove first "\n# of content string
-            content = content.Split('\n')[1];
-
-            reader.Close();
-
-            command.CommandText = $"SELECT order_flowers.quantity, flowers.name FROM order_flowers JOIN flowers ON flowers.id = order_flowers.flower_id WHERE order_flowers.order_id = "+order_id+";";
-            reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                string name = (string)reader["name"];
-                int quantity = (int)reader["quantity"];
+                // Remove first "\n" of content string
+                content = content.Split('\n')[1];
+            }
+            catch { }
+
+            reader_order.Close();
+
+            command_order.CommandText = $"SELECT order_flowers.quantity, flowers.name FROM order_flowers JOIN flowers ON flowers.id = order_flowers.flower_id WHERE order_flowers.order_id = " + order_id + ";";
+            reader_order = command_order.ExecuteReader();
+
+            while (reader_order.Read())
+            {
+                string name = (string)reader_order["name"];
+                int quantity = (int)reader_order["quantity"];
                 content += "\n" + quantity + "x " + name;
             }
 
-            reader.Close();
+            reader_order.Close();
 
-            command.CommandText = $"SELECT order_bouquets.quantity, bouquets.name FROM order_bouquets JOIN bouquets ON bouquets.id = order_bouquets.bouquet_id WHERE order_bouquets.order_id = " + order_id + ";";
-            reader = command.ExecuteReader();
+            command_order.CommandText = $"SELECT order_bouquets.quantity, bouquets.name FROM order_bouquets JOIN bouquets ON bouquets.id = order_bouquets.bouquet_id WHERE order_bouquets.order_id = " + order_id + ";";
+            reader_order = command_order.ExecuteReader();
 
-            while (reader.Read())
+            while (reader_order.Read())
             {
-                string name = (string)reader["name"];
-                int quantity = (int)reader["quantity"];
+                string name = (string)reader_order["name"];
+                int quantity = (int)reader_order["quantity"];
                 content += "\n" + quantity + "x " + name;
             }
 
-            reader.Close();
+            reader_order.Close();
+            connection_order.Close();
 
             return content;
 
         }
 
+        private void Update_Stock(object sender, RoutedEventArgs e)
+        {
+            //On récupère les produits du DataGrid avec les modifications
+            List<Products> productsToUpdate = new List<Products>();
+
+            foreach (Products item in products_data.Items)
+            {
+                productsToUpdate.Add(item);
+            }
+
+            //On récupère les produits différents, donc ceux qu'on doit mettre à jour
+            List<Products> newProducts = productsToUpdate;
+            Trace.WriteLine(newProducts.Count());
+            int counter = 0;
+            foreach (Products p in newProducts)
+            {
+                string price = p.price.ToString().Replace(',', '.');
+                if (p.stock < 5)
+                {
+                    p.alert = true;
+                }
+                if (p.type == "Accessoires")
+                {
+                    command.CommandText = $"UPDATE products SET name = '" + p.name + "', description = '" + p.description + "', price = '" + price + "', stock = " + p.stock + " WHERE id = " + p.id;
+                }
+                else if (p.type == "Fleurs")
+                {
+                    command.CommandText = $"UPDATE flowers SET name = '" + p.name + "', price = '" + price + "', stock = " + p.stock + ", start_month = " + p.start_month + ", end_month = " + p.end_month + " WHERE id = " + p.id;
+
+                }
+                else if (p.type == "Bouquets")
+                {
+                    command.CommandText = $"UPDATE bouquets SET name = '" + p.name + "', description = '" + p.description + "', price = '" + price + "', stock = " + p.stock + " WHERE id = " + p.id;
+                }
+                counter += command.ExecuteNonQuery();
+            }
+            products_data.ItemsSource = newProducts;
+            MessageBox.Show("Succès ! " + counter + " produits ont été mis à jour.");
+
+
+
+
+
+        }
+
+        private void Update_Order_Status(object sender, RoutedEventArgs e)
+        {
+            //On récupère les produits du DataGrid avec les modifications
+            List<Orders> ordersToUpdate = new List<Orders>();
+
+            foreach (Orders item in orders_data.Items)
+            {
+                ordersToUpdate.Add(item);
+            }
+
+            int counter = 0;
+            foreach (Orders o in ordersToUpdate)
+            {
+                command.CommandText = $"UPDATE orders SET status = '" + o.status.ToString() + "' WHERE id = " + o.id;
+                counter += command.ExecuteNonQuery();
+            }
+            MessageBox.Show("Succès ! " + counter + " commandes ont été mis à jour.");
+
+        }
+
     }
 
-    
+
 
     public class Client
     {
@@ -527,7 +594,7 @@ namespace Fleurs.Windows
         public string fidelity_level { get; set; } //0: no fidelity, 1: bronze, 2: gold
 
     }
-    
+
     public class Shop
     {
         public int id { get; set; }
@@ -549,6 +616,14 @@ namespace Fleurs.Windows
             this.image = image;
         }
     }
+    public enum OrderStatus
+    {
+        VINV,
+        CC,
+        CPAV,
+        CAL,
+        CL
+    }
 
     public class Orders
     {
@@ -557,15 +632,15 @@ namespace Fleurs.Windows
         public string type { get; set; }
         public string wishes { get; set; }
         public decimal max_price { get; set; }
-        public int address { get; set; } 
-        public string message { get; set; } 
+        public int address { get; set; }
+        public string message { get; set; }
         public DateTime delivery { get; set; }
         public DateTime creation_time { get; set; }
-        public string status { get; set; }
+        public OrderStatus status { get; set; }
         public string shop { get; set; }
         public string content { get; set; }
-        
-        public Orders(int id, int client_id, string type, string wishes, decimal max_price, int address, string message, DateTime delivery, DateTime creation_time, string status, string shop, string content)
+
+        public Orders(int id, int client_id, string type, string wishes, decimal max_price, int address, string message, DateTime delivery, DateTime creation_time, OrderStatus status, string shop, string content)
         {
             this.id = id;
             this.client_id = client_id;
@@ -584,6 +659,7 @@ namespace Fleurs.Windows
 
     public class Products
     {
+        public int id { get; set; }
         public string type { get; set; }
         public string name { get; set; }
         public string description { get; set; }
@@ -591,11 +667,12 @@ namespace Fleurs.Windows
         public decimal price { get; set; }
         public int start_month { get; set; }
         public int end_month { get; set; }
-        public string category { get; set; }  
+        public string category { get; set; }
         public bool alert { get; set; }
-        
-        public Products(string type, string name, string description, int stock, decimal price, int start_month, int end_month, string category, bool alert)
+
+        public Products(int id, string type, string name, string description, int stock, decimal price, int start_month, int end_month, string category, bool alert)
         {
+            this.id = id;
             this.type = type;
             this.name = name;
             this.description = description;
@@ -606,7 +683,7 @@ namespace Fleurs.Windows
             this.category = category;
             this.alert = alert;
         }
-        
+
 
     }
 

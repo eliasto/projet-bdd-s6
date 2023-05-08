@@ -128,7 +128,7 @@ namespace Fleurs.Windows
         {
             string error = "";
 
-            if(this.Street_TextBox.Text == null || this.Street_TextBox.Text.Length == 0)
+            if (this.Street_TextBox.Text == null || this.Street_TextBox.Text.Length == 0)
             {
                 error += " \n - Numéro et nom de la rue";
             }
@@ -155,11 +155,11 @@ namespace Fleurs.Windows
         private void next_step_1_Click(object sender, RoutedEventArgs e)
         {
             string error = "";
-            if(this.Name_TextBox.Text == null || this.Name_TextBox.Text.Length == 0)
+            if (this.Name_TextBox.Text == null || this.Name_TextBox.Text.Length == 0)
             {
                 error += " \n - Prénom";
             }
-            if(this.Surname_TextBox.Text == null || this.Surname_TextBox.Text.Length == 0)
+            if (this.Surname_TextBox.Text == null || this.Surname_TextBox.Text.Length == 0)
             {
                 error += " \n - Nom";
             }
@@ -181,7 +181,7 @@ namespace Fleurs.Windows
                 error += " \n - Les deux mots de passe ne sont pas égaux";
             }
 
-            
+
             if (error.Length > 0)
             {
                 MessageBox.Show("Veuillez remplir les champs suivants : " + error);

@@ -1,39 +1,40 @@
 ﻿<UserControl x:Class="Fleurs.Windows.Register"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Fleurs"
-        mc:Ignorable="d"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Fleurs"
+    mc:Ignorable="d"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/ouvrir-un-magasin-de-fleurs.jpg" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="/ouvrir-un-magasin-de-fleurs.jpg" Stretch="UniformToFill" />
         </Grid.Background>
         <Grid.RowDefinitions>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Ellipse Width="200" Height="200" Fill="White" />
             <Image Source="/Lg_ChezRoseFleuriste_CMYK.png" Margin="0,0,0,0" Width="200" Height="200" />
         </Grid>
-        <Grid 
+        <Grid
             x:Name="infos"
             Visibility="Visible"
             Grid.Column="1" Background="White">
 
             <Grid x:Name="Login_Stack"
-           Background="White" Margin="0,0,0,50" HorizontalAlignment="Center" VerticalAlignment="Center" Height="250" Width="350"
+                Background="White" Margin="0,0,0,50" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Height="250" Width="350"
             >
                 <Grid VerticalAlignment="Center" Height="200">
                     <Grid.RowDefinitions>
@@ -44,31 +45,34 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top">Création de votre compte</TextBlock>
+                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center"
+                        VerticalAlignment="Top">Création de votre compte</TextBlock>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBox
-                        Grid.Column="0"
-                        x:Name="Name_TextBox"
-                        materialDesign:HintAssist.Hint="Votre prénom"
-                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                            Grid.Column="0"
+                            x:Name="Name_TextBox"
+                            materialDesign:HintAssist.Hint="Votre prénom"
+                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                            Margin="30,0,30,0" />
                         <TextBox
-                        Grid.Column="1"
-                        x:Name="Surname_TextBox"
-                        materialDesign:HintAssist.Hint="Votre nom"
-                        Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                            Grid.Column="1"
+                            x:Name="Surname_TextBox"
+                            materialDesign:HintAssist.Hint="Votre nom"
+                            Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                            Margin="30,0,30,0" />
                     </Grid>
                     <TextBox
                         Grid.Row="2"
                         x:Name="Email_TextBox"
                         materialDesign:HintAssist.Hint="Votre e-mail"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
                     <TextBox
                         Grid.Row="3"
                         PreviewTextInput="NumberValidationTextBox"
@@ -76,7 +80,8 @@
                         x:Name="Phone_TextBox"
                         materialDesign:HintAssist.Hint="Votre numéro de téléphone"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" UndoLimit="10"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"
+                        UndoLimit="10" />
                     <PasswordBox
                         Grid.Row="4"
                         materialDesign:HintAssist.Hint="Mot de passe"
@@ -85,7 +90,7 @@
                         IsEnabled="True"
                         Style="{StaticResource MaterialDesignRevealPasswordBox}"
                         x:Name="Mdp_TextBox"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
                     <PasswordBox
                         Grid.Row="5"
                         materialDesign:HintAssist.HelperText="Veuillez confirmer votre mot de passe"
@@ -95,29 +100,36 @@
                         IsEnabled="True"
                         Style="{StaticResource MaterialDesignRevealPasswordBox}"
                         x:Name="Mdp_Confirm_TextBox"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
-                    
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
+
                 </Grid>
             </Grid>
             <Grid VerticalAlignment="Bottom">
                 <Button
-                x:Name="next_step_1"
+                    x:Name="next_step_1"
                     Click="next_step_1_Click"
-    materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
-    Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="Etape suivante 1/3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Background="Black" BorderBrush="#FF444744" Cursor="Hand"/>
+                    materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                    Content="Etape suivante 1/3" HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom" Margin="0,0,0,50" Background="Black"
+                    BorderBrush="#FF444744" Cursor="Hand" />
                 <Button
-                Click="Redirect_Register_Click"
-                Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous avez déjà un compte ? Se connecter.</Button>
+                    Click="Redirect_Register_Click"
+                    Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040"
+                    Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous avez
+                    déjà un compte ? Se connecter.</Button>
 
             </Grid>
         </Grid>
-        <Grid 
+        <Grid
             x:Name="address"
             Visibility="Hidden"
             Grid.Column="1" Background="White">
 
             <Grid x:Name="Register_address_Stack"
-           Background="White" Margin="0,0,0,50" HorizontalAlignment="Center" VerticalAlignment="Center" Height="250" Width="350"
+                Background="White" Margin="0,0,0,50" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Height="250" Width="350"
             >
                 <Grid VerticalAlignment="Center" Height="200">
                     <Grid.RowDefinitions>
@@ -128,58 +140,68 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top">Veuillez entrer votre adresse</TextBlock>
+                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center"
+                        VerticalAlignment="Top">Veuillez entrer votre adresse</TextBlock>
                     <TextBox
                         Grid.Row="1"
                         x:Name="Street_TextBox"
                         materialDesign:HintAssist.Hint="Numéro et nom de la rue"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
                     <TextBox
                         Grid.Row="2"
                         x:Name="Complement_TextBox"
                         materialDesign:HintAssist.Hint="Complément d'adresse"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBox
-                        Grid.Column="0"
-                        x:Name="Ville_TextBox"
-                        materialDesign:HintAssist.Hint="Ville"
-                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,10,0"/>
+                            Grid.Column="0"
+                            x:Name="Ville_TextBox"
+                            materialDesign:HintAssist.Hint="Ville"
+                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                            Margin="30,0,10,0" />
                         <TextBox
-                        Grid.Column="1"
-                        x:Name="Postal_code_TextBox"
-                        materialDesign:HintAssist.Hint="Code postal"
-                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,30,0"/>
+                            Grid.Column="1"
+                            x:Name="Postal_code_TextBox"
+                            materialDesign:HintAssist.Hint="Code postal"
+                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                            Margin="0,0,30,0" />
                     </Grid>
                 </Grid>
             </Grid>
             <Grid VerticalAlignment="Bottom">
                 <Button
-                x:Name="next_step_2"
+                    x:Name="next_step_2"
                     Click="next_step_2_Click"
-    materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
-    Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="Etape suivante 2/3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Background="Black" BorderBrush="#FF444744" Cursor="Hand"/>
+                    materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                    Content="Etape suivante 2/3" HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom" Margin="0,0,0,50" Background="Black"
+                    BorderBrush="#FF444744" Cursor="Hand" />
                 <Button
-                Click="Redirect_Register_Click"
-                Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous avez déjà un compte ? Se connecter.</Button>
+                    Click="Redirect_Register_Click"
+                    Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040"
+                    Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous avez
+                    déjà un compte ? Se connecter.</Button>
 
             </Grid>
         </Grid>
-        <Grid 
+        <Grid
             x:Name="credit_card"
             Visibility="Hidden"
             Grid.Column="1" Background="White">
 
             <Grid x:Name="Register_credit_card_Stack"
-           Background="White" Margin="0,0,0,50" HorizontalAlignment="Center" VerticalAlignment="Center" Height="250" Width="350"
+                Background="White" Margin="0,0,0,50" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Height="250" Width="350"
             >
                 <Grid VerticalAlignment="Center" Height="200">
                     <Grid.RowDefinitions>
@@ -189,22 +211,24 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top">Enregistrer votre carte bancaire</TextBlock>
+                    <TextBlock Grid.Row="0" FontWeight="Bold" HorizontalAlignment="Center"
+                        VerticalAlignment="Top">Enregistrer votre carte bancaire</TextBlock>
                     <TextBox
                         Grid.Row="1"
                         x:Name="Credit_card_name_TextBox"
                         materialDesign:HintAssist.Hint="Nom du porteur"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
                     <TextBox
                         Grid.Row="2"
                         x:Name="Credit_card_number_TextBox"
                         materialDesign:HintAssist.Hint="Numéro de carte de crédit"
                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
-                    <TextBlock Grid.Row="3" 
-                               Margin="30,0,30,0"
-                               FontWeight="Normal" HorizontalAlignment="Left" VerticalAlignment="Center">Date d'expiration et code de sécurité</TextBlock>
+                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0" />
+                    <TextBlock Grid.Row="3"
+                        Margin="30,0,30,0"
+                        FontWeight="Normal" HorizontalAlignment="Left" VerticalAlignment="Center">Date
+                        d'expiration et code de sécurité</TextBlock>
 
                     <Grid Grid.Row="4">
                         <Grid.ColumnDefinitions>
@@ -221,46 +245,54 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBox
-                        Grid.Column="0"
-                        
-                        x:Name="Credit_card_expiry_month_TextBox"
-                        materialDesign:HintAssist.Hint=""
-                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBlock 
-                                Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">/</TextBlock>
+                                Grid.Column="0"
+                                x:Name="Credit_card_expiry_month_TextBox"
+                                materialDesign:HintAssist.Hint=""
+                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                Margin="0,0,5,0" />
+                            <TextBlock
+                                Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center"
+                                VerticalAlignment="Center">/</TextBlock>
 
                             <TextBox
-                        Grid.Column="2"
-                        
-                        x:Name="Credit_card_expiry_year_TextBox"
-                        materialDesign:HintAssist.Hint=""
-                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                Grid.Column="2"
+                                x:Name="Credit_card_expiry_year_TextBox"
+                                materialDesign:HintAssist.Hint=""
+                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                Margin="5,0,0,0" />
                         </Grid>
                         <TextBox
-                        Grid.Column="1"
-                        x:Name="Credit_card_ccv_TextBox"
-                        materialDesign:HintAssist.Hint="CCV"
-                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="30,0,30,0"/>
+                            Grid.Column="1"
+                            x:Name="Credit_card_ccv_TextBox"
+                            materialDesign:HintAssist.Hint="CCV"
+                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                            Margin="30,0,30,0" />
                     </Grid>
                 </Grid>
             </Grid>
             <Grid VerticalAlignment="Bottom">
                 <Button
-                x:Name="next_step_3"
+                    x:Name="next_step_3"
                     Click="next_step_3_Click"
-    materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
-    Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="Valider mon compte 3/3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Background="Black" BorderBrush="#FF444744" Cursor="Hand"/>
+                    materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                    Content="Valider mon compte 3/3" HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom" Margin="0,0,0,50" Background="Black"
+                    BorderBrush="#FF444744" Cursor="Hand" />
                 <Button
-                Click="Redirect_Register_Click"
-                Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous avez déjà un compte ? Se connecter.</Button>
+                    Click="Redirect_Register_Click"
+                    Grid.Row="0" FontWeight="Normal" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" FontSize="10" Margin="0,5,0,0" Foreground="#FF414040"
+                    Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0">Vous avez
+                    déjà un compte ? Se connecter.</Button>
 
 
             </Grid>
         </Grid>
-        
+
 
     </Grid>
 </UserControl>
