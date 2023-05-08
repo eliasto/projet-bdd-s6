@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 
 using System.Text.RegularExpressions;
 
@@ -94,11 +96,34 @@ namespace Fleurs.Windows
 
                     string clients = "INSERT INTO clients (name, surname, phone, email, password, address, credit_card) VALUES (@name, @surname, @phone, @email, @password, @address, @credit_card)";
                     MySqlCommand command_clients = new MySqlCommand(clients, connection);
+
+                    string userPassword = this.Mdp_TextBox.Password;
+                    string hash = "";
+                    using (SHA256 sha256Hash = SHA256.Create())
+                    {
+                        // Convertir la chaîne en tableau de bytes
+                        byte[] bytes = Encoding.UTF8.GetBytes(userPassword);
+
+                        // Calculer la valeur de hachage SHA256
+                        byte[] hashBytes = sha256Hash.ComputeHash(bytes);
+
+                        // Convertir le tableau de bytes en chaîne hexadécimale
+                        StringBuilder builder = new StringBuilder();
+                        for (int i = 0; i < hashBytes.Length; i++)
+                        {
+                            builder.Append(hashBytes[i].ToString("x2"));
+                        }
+                        string hashString = builder.ToString();
+
+                        // Afficher la valeur de hachage
+                        hash = hashString;
+                    }
+
                     command_clients.Parameters.AddWithValue("@name", this.Name_TextBox.Text);
                     command_clients.Parameters.AddWithValue("@surname", this.Surname_TextBox.Text);
                     command_clients.Parameters.AddWithValue("@phone", this.Phone_TextBox.Text);
                     command_clients.Parameters.AddWithValue("@email", this.Email_TextBox.Text);
-                    command_clients.Parameters.AddWithValue("@password", this.Mdp_TextBox.Password);
+                    command_clients.Parameters.AddWithValue("@password", hash);
                     command_clients.Parameters.AddWithValue("@address", id_address);
                     command_clients.Parameters.AddWithValue("@credit_card", id_credit_card);
 
@@ -115,6 +140,7 @@ namespace Fleurs.Windows
 
 
                     MessageBox.Show("Félicitation " + this.Name_TextBox.Text + " ! Votre compte a été créé avec succès !", "Bienvenue sur l'extranet de Chez Rose", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Content = new Login();
                 }
             }
             catch (Exception ex)

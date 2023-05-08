@@ -28,16 +28,16 @@ INSERT INTO credit_card (name, holder, number, expiry, ccv) VALUES
 
 # Table clients
 INSERT INTO clients (name, surname, phone, email, password, address, credit_card, employee) VALUES
-('Elias', 'Tourneux', '0661531991', 'me@eliqs.dev', 'toutou&67', 1, 1, 1),
-('Marc', 'Viallard', '0645123456', 'marc.viallard@hotmail.com', 'marximarc*$4442', 2,2, 0),
-('Emma', 'Durand', '0678563214', 'emma.durand@gmail.com', 'passw0rd', 3, 3, 0),
-('Lucie', 'Lefebvre', '0687456321', 'lucie.lefebvre@hotmail.com', '123456789', 4, 4, 0),
-('Thomas', 'Garcia', '0654789123', 'thomas.garcia@outlook.fr', 'qwerty', 5, 5, 0),
-('Antoine', 'Lemoine', '0645123789', 'antoine.lemoine@yahoo.com', 'azerty', 6, 6, 0),
-('Clara', 'Renard', '0612345678', 'clara.renard@laposte.net', 'coucou123', 7, 7, 0),
-('Julie', 'Besson', '0678451297', 'julie.besson@gmail.com', 'toto123', 8, 8, 0),
-('Adrien', 'Morel', '0645789321', 'adrien.morel@hotmail.com', 'p@ssword', 9, 9, 0),
-('Sophie', 'Dubois', '0612345689', 'sophie.dubois@yahoo.com', 'password123', 10, 10, 0);
+('Elias', 'Tourneux', '0661531991', 'me@eliqs.dev', '9478567bec4ca718859143e4b61b5f8ffd2b66f96694ade0d2ab55d758b306f7', 1, 1, 1), #toutou&67
+('Marc', 'Viallard', '0645123456', 'marc.viallard@hotmail.com', '2508b5c55b62e4e8de08f3608577d365beb26512ebef683d067328fffd368079', 2,2, 0), #marximarc*$4442
+('Emma', 'Durand', '0678563214', 'emma.durand@gmail.com', '8f0e2f76e22b43e2855189877e7dc1e1e7d98c226c95db247cd1d547928334a9', 3, 3, 0), #passw0rd
+('Lucie', 'Lefebvre', '0687456321', 'lucie.lefebvre@hotmail.com', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', 4, 4, 0), #123456789
+('Thomas', 'Garcia', '0654789123', 'thomas.garcia@outlook.fr', '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5', 5, 5, 0), #qwerty
+('Antoine', 'Lemoine', '0645123789', 'antoine.lemoine@yahoo.com', 'f2d81a260dea8a100dd517984e53c56a7523d96942a834b9cdc249bd4e8c7aa9', 6, 6, 0), #azerty
+('Clara', 'Renard', '0612345678', 'clara.renard@laposte.net', '46a52db240ac194d7bb1c899d491c835f4de92206ce381fb6ec7a704b1daedb4', 7, 7, 0), #coucou123
+('Julie', 'Besson', '0678451297', 'julie.besson@gmail.com', '9a45271efef868a31ebbd528c407c678c33d8982871d92da3a766c1283c12f69', 8, 8, 0), #toto123
+('Adrien', 'Morel', '0645789321', 'adrien.morel@hotmail.com', '0fd205965ce169b5c023282bb5fa2e239b6716726db5defaa8ceff225be805dc', 9, 9, 0), #p@ssword
+('Sophie', 'Dubois', '0612345689', 'sophie.dubois@yahoo.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 10, 10, 0); #password123
 
 # Table products
 
