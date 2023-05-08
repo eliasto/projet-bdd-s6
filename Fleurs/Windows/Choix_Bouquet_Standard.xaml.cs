@@ -50,7 +50,7 @@ namespace Fleurs.Windows
             reader.Close();
 
         }
-
+        //Check if every field has the right type of value and is not empty, then passes to the next page with the right values
         private void FinaliseCommande_Button_Click(object sender, RoutedEventArgs e)
         {
             DateTime? selectedDate = DateDeLivraison_DP.SelectedDate;

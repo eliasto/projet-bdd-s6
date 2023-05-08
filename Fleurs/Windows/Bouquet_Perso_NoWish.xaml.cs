@@ -13,7 +13,7 @@ namespace Fleurs.Windows
 
     public partial class Bouquet_Perso_NoWish : UserControl
     {
-        
+        //Lists of the flowers and products from the db (here initialize empty but will get the values later)
         List<Fleur> fleurs = new List<Fleur>();
         List<Produit> produits = new List<Produit>();
 
@@ -24,6 +24,7 @@ namespace Fleurs.Windows
         private string typePage;
 
         float prix;
+        // Fill flowers end produits with the values from the db and bind them to the xaml
         public Bouquet_Perso_NoWish(string email, string type)
         {
             emailPage = email;
@@ -44,7 +45,7 @@ namespace Fleurs.Windows
                 fleurs.Add(fleur);
             }
 
-            dgFleurs.ItemsSource = fleurs;
+            dgFleurs.ItemsSource = fleurs;//Binding to xaml
 
             connection.Close();
             connection.Open();
@@ -59,7 +60,7 @@ namespace Fleurs.Windows
                 produits.Add(produit);
             }
 
-            dgProduits.ItemsSource = produits;
+            dgProduits.ItemsSource = produits;//Binding to xaml
 
             connection.Close();
         }
@@ -185,7 +186,7 @@ namespace Fleurs.Windows
             }
             Get_price();
         }
-
+        //Check if every field has the right type of value and is not empty, then passes to the next page with the right values
         private void FinaliseCommande_Button_Click(object sender, RoutedEventArgs e)
         {
             DateTime? selectedDate = DateDeLivraison_DP.SelectedDate;
@@ -205,10 +206,6 @@ namespace Fleurs.Windows
                 futur = !(selectedDate < date_du_jour);
                 if (futur)
                 {
-                    //string email, string type, string etat, string dateDeLivraison, decimal prix,
-                    //List<Bouquet_Perso_NoWish.Fleur> fleurs, List<Bouquet_Perso_NoWish.Produit> produits
-
-
                     Finalisation_Commande fin_de_commande = new Finalisation_Commande(emailPage, typePage, "CPAV", dateDeLivraison, prix, fleurs, produits);
                     this.Content = fin_de_commande;
                 }
