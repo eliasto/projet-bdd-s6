@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies> 
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
 
