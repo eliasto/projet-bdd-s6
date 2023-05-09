@@ -396,7 +396,7 @@ namespace Fleurs.Windows
             MySqlCommand command = this.connection.CreateCommand();
             command.CommandText = $"SELECT c.id, c.name, c.surname, c.phone, c.email, COUNT(o.id) AS num_orders, CASE WHEN COUNT(o.client_id) >= 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'OR' WHEN COUNT(o.client_id) < 5 AND AVG(DATEDIFF(o.delivery, o.creation_date)) <= 30 THEN 'Bronze' ELSE 'Aucun' END AS fidelity_level FROM clients AS c JOIN orders AS o ON c.id = o.client_id WHERE o.creation_date > DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY c.id, c.name, c.surname, c.phone, c.email HAVING COUNT(o.id) > 1;";
             MySqlDataReader reader = command.ExecuteReader();
-            List<Client_XML> clients = new List<Client_XML>();
+            List<Client> clients = new List<Client>();
             while (reader.Read())
             {
                 int id = (int)reader["id"];
@@ -405,12 +405,12 @@ namespace Fleurs.Windows
                 string phone = (string)reader["phone"];
                 string email = (string)reader["email"];
                 string fidelity_level = (string)reader["fidelity_level"];
-                Client_XML client = new Client_XML { email = email, id = id, name = name, surname = surname, phone = phone, fidelity_level = fidelity_level };
+                Client client = new Client { email = email, id = id, name = name, surname = surname, phone = phone, fidelity_level = fidelity_level };
                 clients.Add(client);
             }
 
             reader.Close();
-            XmlSerializer xs = new XmlSerializer(typeof(List<Client_XML>));
+            XmlSerializer xs = new XmlSerializer(typeof(List<Client>));
             // Créez une instance de SaveFileDialog
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
@@ -580,18 +580,11 @@ namespace Fleurs.Windows
             this.fidelity_level = fidelity_level;
         }
 
+        public Client()
+        {
+            
+        }
 
-    }
-
-    public class Client_XML
-    {
-        [XmlAttribute]
-        public int id { get; set; }
-        public string name { get; set; }
-        public string surname { get; set; }
-        public string phone { get; set; }
-        public string email { get; set; }
-        public string fidelity_level { get; set; } //0: no fidelity, 1: bronze, 2: gold
 
     }
 

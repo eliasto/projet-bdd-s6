@@ -9,7 +9,5 @@ namespace Fleurs.Utils
             this.connectionString = "SERVER=marc.eliqs.dev;DATABASE=Fleurs;UID=marc;PASSWORD=leobddmarximarc;";
             //this.connectionString = "SERVER=localhost;PORT=3306;DATABASE=BelleFleur;UID=root;PASSWORD=root;";
         }
-
-
     }
 }
